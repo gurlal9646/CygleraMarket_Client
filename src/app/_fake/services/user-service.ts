@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IRoleModel } from './role.service';
 
 export interface DataTablesResponse {
     draw?: number;
@@ -22,7 +21,6 @@ export interface IUserModel {
     profile_photo_path?: null | string;
     updated_at?: string;
     password?: string;
-    roles?: IRoleModel[];
     role?: string;
 }
 

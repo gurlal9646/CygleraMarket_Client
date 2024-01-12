@@ -35,18 +35,6 @@ const Routing: Routes = [
     // data: { layout: 'light-sidebar' },
   },
   {
-    path: 'apps/users',
-    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
-  },
-  {
-    path: 'apps/roles',
-    loadChildren: () => import('./role/role.module').then((m) => m.RoleModule),
-  },
-  {
-    path: 'apps/permissions',
-    loadChildren: () => import('./permission/permission.module').then((m) => m.PermissionModule),
-  },
-  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
