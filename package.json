@@ -45,6 +45,7 @@
     "ngx-clipboard": "16.0.0",
     "nouislider": "^15.7.0",
     "object-path": "0.11.8",
+    "phone": "^3.1.42",
     "prism-themes": "1.9.0",
     "prismjs": "^1.29.0",
     "rxjs": "~7.8.0",

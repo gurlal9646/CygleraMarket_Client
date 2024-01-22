@@ -49,10 +49,13 @@
 <div class="fv-row mb-8">
   <label class="form-label fs-6 fw-bolder text-gray-900">Email</label>
   <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off"
-    [ngClass]="{
-      'is-invalid': loginForm.controls['email'].invalid,
-      'is-valid': loginForm.controls['email'].valid
-    }" />
+  [ngClass]="{
+    'is-invalid':
+    loginForm.controls['email'].invalid &&
+      (loginForm.controls['email'].touched ||
+      loginForm.controls['email'].dirty),
+    'is-valid': loginForm.controls['email'].valid
+  }" />
   <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
       validation: 'required',
       message: 'Email is required',
@@ -82,8 +85,11 @@
   <label class="form-label fw-bolder text-gray-900 fs-6 mb-0">Password</label>
 
   <input class="form-control bg-transparent" type="password" name="password" autocomplete="off"
-    formControlName="password" [ngClass]="{
-      'is-invalid': loginForm.controls['password'].invalid,
+    formControlName="password"  [ngClass]="{
+      'is-invalid':
+      loginForm.controls['password'].invalid &&
+        (loginForm.controls['password'].touched ||
+        loginForm.controls['password'].dirty),
       'is-valid': loginForm.controls['password'].valid
     }" />
   <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
