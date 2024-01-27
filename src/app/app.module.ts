@@ -10,6 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { LoginService } from './services/login.service';
+import { BuyerService } from './services/buyer.service';
+import { SellerService } from './services/seller.service';
 
 
 function appInitializer(authService: AuthService) {
@@ -36,6 +39,9 @@ function appInitializer(authService: AuthService) {
     
   ],
   providers: [
+    LoginService,
+    BuyerService,
+    SellerService,
     {
       provide: APP_INITIALIZER,
       useFactory: appInitializer,

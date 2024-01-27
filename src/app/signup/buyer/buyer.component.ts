@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { phone } from 'phone';
+import { ApiResponse } from 'src/app/models/ApiResponse';
+import { BuyerService } from 'src/app/services/buyer.service';
 
 @Component({
   selector: 'app-buyer',
   templateUrl: './buyer.component.html',
   styleUrl: './buyer.component.scss',
 })
-export class BuyerComponent implements OnInit, OnDestroy {
+export class BuyerComponent implements OnInit {
   registrationForm: FormGroup;
   hasError: boolean;
   countries = [
@@ -30,10 +31,7 @@ export class BuyerComponent implements OnInit, OnDestroy {
     // Add more countries with their cities and states
   ];
 
-  // private fields
-  private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router,private _buyerService:BuyerService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -208,9 +206,17 @@ export class BuyerComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit() {
+  async submit() {
     this.hasError = false;
-    let response = phone('(817) 569-8900');
+    let phoneResult = phone('(817) 569-8900');
+
+
+    const response:ApiResponse = await this._buyerService.register(this.registrationForm.value);
+    if(response.code == 1){
+      console.log(response);
+      alert("Registration Successful");
+      window.location.reload();
+    }
   }
 
   getCountriesStates(selectedCountry: string): { state: string, cities: string[] }[] {
@@ -223,7 +229,5 @@ export class BuyerComponent implements OnInit, OnDestroy {
     const city = country?.states.find((s) => s.state === selectedState);
     return city ? city.cities : [];
   }
-  ngOnDestroy() {
-    this.unsubscribe.forEach((sb) => sb.unsubscribe());
-  }
+
 }
