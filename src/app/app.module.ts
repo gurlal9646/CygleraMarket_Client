@@ -14,6 +14,7 @@ import { BuyerService } from './services/buyer.service';
 import { SellerService } from './services/seller.service';
 
 
+
 function appInitializer(authService: AuthService) {
   return () => {
     return new Promise((resolve) => {
@@ -33,7 +34,8 @@ function appInitializer(authService: AuthService) {
     ClipboardModule,
     AppRoutingModule,
     InlineSVGModule.forRoot(),
-    NgbModule    
+    NgbModule 
+  
   ],
   providers: [
     LoginService,

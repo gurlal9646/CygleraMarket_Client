@@ -5,6 +5,8 @@ import { first } from 'rxjs/operators';
 import { UserModel } from '../modules/auth/models/user.model';
 import { AuthService } from '../modules/auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../services/login.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -22,15 +24,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private _loginService: LoginService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {
-    this.isLoading$ = this.authService.isLoading$;
-    // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
+
   }
 
   ngOnInit(): void {
@@ -67,19 +66,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit() {
+ async  submit() {
     this.hasError = false;
-    const loginSubscr = this.authService
-      .login(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe((user: UserModel | undefined) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          this.hasError = true;
-        }
-      });
-    this.unsubscribe.push(loginSubscr);
+    this.spinner.show();
+    const loginResponse = await this._loginService.generateToken(this.loginForm.value);
+    if(loginResponse.code == 1){
+      this.router.navigate(['/dashboard']);
+    }
+    this.spinner.hide();
   }
 
   ngOnDestroy() {

@@ -40,6 +40,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-scale-multiple.css" ,
               "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
             ],
             "scripts": [
