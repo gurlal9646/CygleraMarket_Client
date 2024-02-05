@@ -9,7 +9,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { LoginService } from './services/login.service';
 import { BuyerService } from './services/buyer.service';
 import { SellerService } from './services/seller.service';
@@ -34,9 +33,7 @@ function appInitializer(authService: AuthService) {
     ClipboardModule,
     AppRoutingModule,
     InlineSVGModule.forRoot(),
-    NgbModule,
-    SweetAlert2Module.forRoot()
-    
+    NgbModule    
   ],
   providers: [
     LoginService,
