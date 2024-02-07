@@ -14,11 +14,11 @@ export class LoginService {
   async generateToken(data: any): Promise<ApiResponse> {
     const url = environment.apiUrl;
     try {
-      const response = await firstValueFrom(this._http.post(`${url}/login`, data));
+      const response = await firstValueFrom(this._http.post(`${url}/login/token`, data));
       return response as ApiResponse;
     } catch (error) {
       const res = new ApiResponse();
-      res.subCode = 0;
+      res.subcode = 100;
       res.message = 'An error occurred';
       return Promise.reject(res);
     }

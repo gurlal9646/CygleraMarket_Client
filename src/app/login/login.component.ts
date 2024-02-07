@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { UserModel } from '../modules/auth/models/user.model';
-import { AuthService } from '../modules/auth/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private spinner: NgxSpinnerService
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -63,17 +59,69 @@ export class LoginComponent implements OnInit, OnDestroy {
           Validators.maxLength(100),
         ]),
       ],
+      roleId:[
+        '0'
+      ]
     });
   }
 
- async  submit() {
+  async submit() {
     this.hasError = false;
     this.spinner.show();
-    const loginResponse = await this._loginService.generateToken(this.loginForm.value);
-    if(loginResponse.code == 1){
+    const loginResponse = await this._loginService.generateToken(
+      this.loginForm.value
+    );
+    if (loginResponse.code == 1) {
+      localStorage.setItem('token',loginResponse.data.token);
       this.router.navigate(['/dashboard']);
+    } else if (loginResponse.subcode == 2) {
+      this.showLoginOptions();
     }
+
     this.spinner.hide();
+  }
+
+  
+  showLoginOptions() {
+    Swal.fire({
+      position: 'center',
+      icon: 'info',
+      title: 'Please select your account type:',
+      showConfirmButton: false,
+      showCloseButton:true,
+      html: `
+        <div style="text-align: center;">
+          <button class="swal2-confirm swal2-styled swal-button--buyer">Buyer</button>
+          <button class="swal2-confirm swal2-styled swal-button--seller">Seller</button>
+          <button class="swal2-confirm swal2-styled swal-button--admin">Admin</button>
+        </div>
+      `
+    });
+
+    // Handling button clicks using event delegation
+    document.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('swal-button--buyer')) {
+        // Perform action for Buyer
+        console.log('Buyer selected');
+        this.loginForm.get('roleId')?.setValue(1);
+        Swal.close();
+        this.submit();
+      } else if (target.classList.contains('swal-button--seller')) {
+        // Perform action for Seller
+        console.log('Seller selected');
+        this.loginForm.get('roleId')?.setValue(2);
+        Swal.close();
+        this.submit();
+      } else if (target.classList.contains('swal-button--admin')) {
+        // Perform action for Admin
+        console.log('Admin selected');
+        this.loginForm.get('roleId')?.setValue(10);
+        Swal.close();
+        this.submit();
+      }
+    
+    });
   }
 
   ngOnDestroy() {

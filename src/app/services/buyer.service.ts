@@ -18,7 +18,7 @@ export class BuyerService {
       return response as ApiResponse;
     } catch (error) {
       const res = new ApiResponse();
-      res.subCode = 0;
+      res.subcode = 100;
       res.message = 'An error occurred';
       return Promise.reject(res);
     }

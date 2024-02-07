@@ -1,6 +1,6 @@
 export class ApiResponse {
     code: number;
-    subCode: number;
+    subcode: number;
     message: string;
     data: any;
   }
