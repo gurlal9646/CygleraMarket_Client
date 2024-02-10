@@ -11,7 +11,7 @@ export class ProductService {
   constructor(private _http: HttpClient) {}
 
   async getProducts(data: any): Promise<ApiResponse> {
-    const url = `${environment.apiUrl}/product/getProducts`;
+    const url = `${environment.apiUrl}/product/getproducts`;
     try {
       const response = await firstValueFrom(this._http.post(url, data));
       return response as ApiResponse;

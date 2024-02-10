@@ -39,13 +39,13 @@ export class ProductsComponent implements OnInit, AfterViewInit {
       },
       columns: [{
         title: 'ID',
-        data: 'id'
+        data: 'productId'
       }, {
-        title: 'First name',
-        data: 'firstName'
+        title: 'Name',
+        data: 'name'
       }, {
-        title: 'Last name',
-        data: 'lastName'
+        title: 'Price',
+        data: 'price'
       }]
     };
     
