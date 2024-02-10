@@ -10,10 +10,10 @@ import { environment } from 'src/environments/environment';
 export class ProductService {
   constructor(private _http: HttpClient) {}
 
-  async getProducts(data: any): Promise<ApiResponse> {
+  async getProducts(): Promise<ApiResponse> {
     const url = `${environment.apiUrl}/product/getproducts`;
     try {
-      const response = await firstValueFrom(this._http.post(url, data));
+      const response = await firstValueFrom(this._http.get(url ));
       return response as ApiResponse;
     } catch (error) {
       const res = new ApiResponse();

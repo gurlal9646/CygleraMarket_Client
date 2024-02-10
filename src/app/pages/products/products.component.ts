@@ -24,9 +24,9 @@ export class ProductsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dtOptions = {
       serverSide: true,     // Set the flag 
-      ajax: async (dataTablesParameters: any, callback) => {
+      ajax: async (request:any, callback) => {
         try {
-          const resp = await this._productService.getProducts(dataTablesParameters);
+          const resp = await this._productService.getProducts();
     
           callback({
             recordsTotal: resp.data.length,
