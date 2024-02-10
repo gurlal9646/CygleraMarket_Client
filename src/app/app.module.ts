@@ -1,7 +1,7 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -12,17 +12,10 @@ import { AuthService } from './modules/auth/services/auth.service';
 import { LoginService } from './services/login.service';
 import { BuyerService } from './services/buyer.service';
 import { SellerService } from './services/seller.service';
+import { ProductService } from './services/product.service';
+import {  TokenInterceptor } from './guards/auth.http';
 
 
-
-function appInitializer(authService: AuthService) {
-  return () => {
-    return new Promise((resolve) => {
-      //@ts-ignore
-      authService.getUserByToken().subscribe().add(resolve);
-    });
-  };
-}
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,12 +34,9 @@ function appInitializer(authService: AuthService) {
     LoginService,
     BuyerService,
     SellerService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInitializer,
-      multi: true,
-      deps: [AuthService],
-    },
+    ProductService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
+
   ],
   bootstrap: [AppComponent],
 })

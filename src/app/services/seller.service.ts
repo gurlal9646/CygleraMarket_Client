@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiResponse } from '../models/ApiResponse';
 import { firstValueFrom } from 'rxjs';
@@ -14,8 +14,10 @@ export class SellerService {
   async register(data: any): Promise<ApiResponse> {
     const url = `${environment.apiUrl}/buyer/register`;;
     try {
-      const response = await firstValueFrom(this._http.post(url, data));
-      return response as ApiResponse;
+      const headers = new HttpHeaders().set('No-Auth', 'true');
+      const response = await firstValueFrom(
+        this._http.post(url, data, { headers })
+      );      return response as ApiResponse;
     } catch (error) {
       const res = new ApiResponse();
       res.subcode = 100;

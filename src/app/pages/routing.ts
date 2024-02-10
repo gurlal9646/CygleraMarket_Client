@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from '../guards/auth.guard';
 
 const Routing: Routes = [
   {
     path: 'dashboard',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
-    path: 'crafted/pages/profile',
-    loadChildren: () => import('../modules/profile/profile.module').then((m) => m.ProfileModule),
-    // data: { layout: 'light-sidebar' },
+    path: 'products',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./products/products.module').then((m) => m.ProductsModule),
   },
   {
     path: 'crafted/account',

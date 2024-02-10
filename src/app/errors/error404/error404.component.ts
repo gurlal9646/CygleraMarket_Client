@@ -8,15 +8,15 @@ import {
   ScrollTopComponent,
   StickyComponent,
   ToggleComponent,
-} from '../../../_metronic/kt/components';
-import { ThemeModeService } from '../../../_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
+} from '../../_metronic/kt/components';
+import { ThemeModeService } from '../../_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 
 @Component({
-  selector: 'app-error500',
-  templateUrl: './error500.component.html',
-  styleUrls: ['./error500.component.scss'],
+  selector: 'app-error404',
+  templateUrl: './error404.component.html',
+  styleUrls: ['./error404.component.scss'],
 })
-export class Error500Component implements OnInit, OnDestroy {
+export class Error404Component implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   constructor(private router: Router, private modeService: ThemeModeService) {}
@@ -25,8 +25,8 @@ export class Error500Component implements OnInit, OnDestroy {
     const subscr = this.modeService.mode.asObservable().subscribe((mode) => {
       document.body.style.backgroundImage =
         mode === 'dark'
-          ? 'url(./assets/media/auth/bg7-dark.jpg)'
-          : 'url(./assets/media/auth/bg7.jpg)';
+          ? 'url(./assets/media/auth/bg1-dark.jpg)'
+          : 'url(./assets/media/auth/bg1.jpg)';
     });
     this.unsubscribe.push(subscr);
   }
