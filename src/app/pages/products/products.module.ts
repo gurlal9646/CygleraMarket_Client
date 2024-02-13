@@ -1,22 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ProductsComponent } from './products.component';
-import { DataTablesModule } from 'angular-datatables';
+import { AgGridModule } from 'ag-grid-angular';
+import { FormsModule } from '@angular/forms';
+import { ProductListingComponent } from './product-listing/product-listing.component';
+import { ManageProductsComponent } from './manage-products/manage-products.component';
 
 
 
 @NgModule({
-  declarations: [ProductsComponent],
+  declarations: [ProductListingComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
-        component: ProductsComponent,
-      },
+        component: ProductListingComponent
+      },   
+      {
+        path: 'add',
+        component: ManageProductsComponent
+      }
     ]),
-    DataTablesModule
+    AgGridModule,
+    FormsModule // Add FormsModule to imports
+
   ]
 })
 export class ProductsModule { }

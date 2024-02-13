@@ -27,6 +27,7 @@
     "@ngx-translate/core": "15.0.0",
     "@ngx-translate/http-loader": "8.0.0",
     "@popperjs/core": "2.11.8",
+    "ag-grid-angular": "^31.0.3",
     "angular-datatables": "^17.0.0",
     "animate.css": "4.1.1",
     "apexcharts": "^3.37.1",

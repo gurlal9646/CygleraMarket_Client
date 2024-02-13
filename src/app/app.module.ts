@@ -14,6 +14,8 @@ import { BuyerService } from './services/buyer.service';
 import { SellerService } from './services/seller.service';
 import { ProductService } from './services/product.service';
 import {  TokenInterceptor } from './guards/auth.http';
+import { AgGridModule } from "ag-grid-angular";
+
 
 
 
@@ -27,7 +29,8 @@ import {  TokenInterceptor } from './guards/auth.http';
     ClipboardModule,
     AppRoutingModule,
     InlineSVGModule.forRoot(),
-    NgbModule 
+    NgbModule,
+    AgGridModule
   
   ],
   providers: [

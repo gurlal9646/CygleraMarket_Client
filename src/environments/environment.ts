@@ -7,7 +7,7 @@ export const environment = {
   appVersion: 'v8.1.8',
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
-  apiUrl: 'https://cyglera.onrender.com/api',
+  apiUrl: 'https://cygleramarketapi.vercel.app/api',
   appThemeName: 'Metronic',
   appPurchaseUrl: 'https://1.envato.market/EA4JP',
   appHTMLIntegration:

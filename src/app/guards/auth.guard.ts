@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '../modules/auth/services/auth.service';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard  {
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = localStorage.getItem('token');
@@ -12,9 +11,7 @@ export class AuthGuard  {
       // logged in so return true
       return true;
     }
-
-    // not logged in so redirect to login page with the return url
-    this.authService.logout();
+    this.router.navigate(['/error/401']); // Redirect to error page if token is not available
     return false;
   }
 }
