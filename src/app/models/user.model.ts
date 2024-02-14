@@ -3,4 +3,5 @@ export class UserModel {
   roleId: number;
   firstName:string;
   lastName: string;
+  email:string;
 }

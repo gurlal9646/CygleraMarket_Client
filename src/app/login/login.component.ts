@@ -88,7 +88,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         token:loginResponse.data.token,
         roleId: loginResponse.data.roleId,
         firstName: loginResponse.data.firstName,
-        lastName: loginResponse.data.lastName
+        lastName: loginResponse.data.lastName,
+        email:loginResponse.data.email
       };
       this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);

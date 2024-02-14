@@ -1,8 +1,9 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TranslationService } from '../../../../../../modules/i18n';
-import { AuthService, UserType } from '../../../../../../modules/auth';
 import { Router } from '@angular/router';
+import { UserModel } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-inner',
@@ -16,11 +17,15 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   language: LanguageFlag;
   langs = languages;
   private unsubscribe: Subscription[] = [];
+  user:UserModel;
 
   constructor(
     private router:Router,
-    private translationService: TranslationService
-  ) {}
+    private translationService: TranslationService,
+    private authService:AuthService
+  ) {
+      this.user = this.authService.getcurrentUserValue();
+  }
 
   ngOnInit(): void {
     this.setLanguage(this.translationService.getSelectedLanguage());
@@ -66,26 +71,26 @@ const languages = [
     name: 'English',
     flag: './assets/media/flags/united-states.svg',
   },
-  {
-    lang: 'zh',
-    name: 'Mandarin',
-    flag: './assets/media/flags/china.svg',
-  },
-  {
-    lang: 'es',
-    name: 'Spanish',
-    flag: './assets/media/flags/spain.svg',
-  },
-  {
-    lang: 'ja',
-    name: 'Japanese',
-    flag: './assets/media/flags/japan.svg',
-  },
-  {
-    lang: 'de',
-    name: 'German',
-    flag: './assets/media/flags/germany.svg',
-  },
+  // {
+  //   lang: 'zh',
+  //   name: 'Mandarin',
+  //   flag: './assets/media/flags/china.svg',
+  // },
+  // {
+  //   lang: 'es',
+  //   name: 'Spanish',
+  //   flag: './assets/media/flags/spain.svg',
+  // },
+  // {
+  //   lang: 'ja',
+  //   name: 'Japanese',
+  //   flag: './assets/media/flags/japan.svg',
+  // },
+  // {
+  //   lang: 'de',
+  //   name: 'German',
+  //   flag: './assets/media/flags/germany.svg',
+  // },
   {
     lang: 'fr',
     name: 'French',

@@ -217,7 +217,8 @@ export class BuyerComponent implements OnInit {
         token:response.data.token,
         roleId: response.data.roleId,
         firstName: response.data.firstName,
-        lastName: response.data.lastName
+        lastName: response.data.lastName,
+        email:response.data.email
       };
       this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);
