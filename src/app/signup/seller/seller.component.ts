@@ -3,6 +3,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { phone } from 'phone';
+import { ApiResponse } from 'src/app/models/ApiResponse';
+import { SellerService } from 'src/app/services/seller.service';
+import Swal from 'sweetalert2';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserModel } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-seller',
@@ -10,6 +15,7 @@ import { phone } from 'phone';
   styleUrl: './seller.component.scss'
 })
 export class SellerComponent implements OnInit, OnDestroy {
+  user:UserModel;
   registrationForm: FormGroup;
   hasError: boolean;
   countries = [
@@ -33,7 +39,8 @@ export class SellerComponent implements OnInit, OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router,private _sellerService:SellerService,
+    private authService:AuthService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -171,8 +178,8 @@ export class SellerComponent implements OnInit, OnDestroy {
     // Watch for changes in the selected country and update the available states
     this.registrationForm.get('country')!.valueChanges.subscribe((country) => {
       const selectedCountry = this.countries.find((c) => c.name === country);
-      this.registrationForm.get('state')!.setValue(null);
-      this.registrationForm.get('city')!.setValue(null);
+      this.registrationForm.get('state')!.setValue("");
+      this.registrationForm.get('city')!.setValue("");
 
       if (selectedCountry) {
         this.registrationForm
@@ -193,24 +200,38 @@ export class SellerComponent implements OnInit, OnDestroy {
 
       if (selectedCountry) {
         const selectedState = selectedCountry.states.find((s) => s === state);
-        this.registrationForm.get('city')!.setValue(null);
+        this.registrationForm.get('city')!.setValue("");
 
-        if (selectedState) {
-          this.registrationForm
+        this.registrationForm
             .get('city')!
             .setValidators([Validators.required]);
           this.registrationForm.get('city')!.updateValueAndValidity();
-        } else {
-          this.registrationForm.get('city')!.clearValidators();
-          this.registrationForm.get('city')!.updateValueAndValidity();
-        }
       }
     });
   }
 
-  submit() {
+  async submit() {
     this.hasError = false;
-    let response = phone('(817) 569-8900');
+    let phoneresponse = phone('(817) 569-8900');
+    const response:ApiResponse = await this._sellerService.register(this.registrationForm.value);
+    if(response.code == 1){
+      this.user = {
+        token:response.data.token,
+        roleId: response.data.roleId,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName
+      };
+      this.authService.setcurrentUserValue(this.user);
+      this.router.navigate(['/dashboard']);
+    }
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: response.message,
+        showCloseButton:true,
+      });
+    }
   }
 
   getCountriesStates(selectedCountry: string): { state: string, cities: string[] }[] {

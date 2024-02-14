@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { UserModel } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard  {
-  constructor(private router: Router) {}
+  user:UserModel;
+  constructor(private router: Router,private authService:AuthService) {
+      this.user = this.authService.getcurrentUserValue();
+    
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = localStorage.getItem('token');
-    if (currentUser) {
-      // logged in so return true
+    if (this.user.token != '') {
       return true;
     }
     this.router.navigate(['/error/401']); // Redirect to error page if token is not available

@@ -3,7 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { phone } from 'phone';
 import { ApiResponse } from 'src/app/models/ApiResponse';
+import { UserModel } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { BuyerService } from 'src/app/services/buyer.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-buyer',
@@ -11,6 +14,7 @@ import { BuyerService } from 'src/app/services/buyer.service';
   styleUrl: './buyer.component.scss',
 })
 export class BuyerComponent implements OnInit {
+  user:UserModel;
   registrationForm: FormGroup;
   hasError: boolean;
   countries = [
@@ -31,7 +35,8 @@ export class BuyerComponent implements OnInit {
     // Add more countries with their cities and states
   ];
 
-  constructor(private fb: FormBuilder, private router: Router,private _buyerService:BuyerService) {}
+  constructor(private fb: FormBuilder, private router: Router,private _buyerService:BuyerService,
+    private authService:AuthService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -193,15 +198,10 @@ export class BuyerComponent implements OnInit {
         const selectedState = selectedCountry.states.find((s) => s === state);
         this.registrationForm.get('city')!.setValue(null);
 
-        if (selectedState) {
-          this.registrationForm
+        this.registrationForm
             .get('city')!
             .setValidators([Validators.required]);
           this.registrationForm.get('city')!.updateValueAndValidity();
-        } else {
-          this.registrationForm.get('city')!.clearValidators();
-          this.registrationForm.get('city')!.updateValueAndValidity();
-        }
       }
     });
   }
@@ -213,9 +213,22 @@ export class BuyerComponent implements OnInit {
 
     const response:ApiResponse = await this._buyerService.register(this.registrationForm.value);
     if(response.code == 1){
-      console.log(response);
-      alert("Registration Successful");
-      window.location.reload();
+      this.user = {
+        token:response.data.token,
+        roleId: response.data.roleId,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName
+      };
+      this.authService.setcurrentUserValue(this.user);
+      this.router.navigate(['/dashboard']);
+    }
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: response.message,
+        showCloseButton:true,
+      });
     }
   }
 

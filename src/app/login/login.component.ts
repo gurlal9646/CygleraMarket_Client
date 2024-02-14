@@ -5,6 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { AuthService } from '../services/auth.service';
+import { UserModel } from '../models/user.model';
+export type UserType = UserModel | undefined;
 
 @Component({
   selector: 'app-login',
@@ -16,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hasError: boolean;
   returnUrl: string;
   isLoading$: Observable<boolean>;
-
+  user: UserType;
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
@@ -25,8 +28,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _loginService: LoginService,
     private route: ActivatedRoute,
     private router: Router,
-    private spinner: NgxSpinnerService
-  ) {}
+    private spinner: NgxSpinnerService,
+    private authService:AuthService
+  ) {
+    this.isLoading$ = this.authService.isLoading$;
+    // redirect to home if already logged in
+    if (this.authService.getcurrentUserValue()) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -34,6 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.returnUrl =
       this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
   }
+
 
   // convenience getter for easy access to form fields
   get f() {
@@ -65,6 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+
   async submit() {
     this.hasError = false;
     this.spinner.show();
@@ -72,10 +84,24 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.loginForm.value
     );
     if (loginResponse.code == 1) {
-      localStorage.setItem('token',loginResponse.data.token);
+      this.user = {
+        token:loginResponse.data.token,
+        roleId: loginResponse.data.roleId,
+        firstName: loginResponse.data.firstName,
+        lastName: loginResponse.data.lastName
+      };
+      this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);
     } else if (loginResponse.subcode == 2) {
       this.showLoginOptions();
+    }
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: loginResponse.message,
+        showCloseButton:true,
+      });
     }
 
     this.spinner.hide();

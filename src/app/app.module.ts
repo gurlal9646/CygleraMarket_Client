@@ -8,13 +8,13 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthService } from './modules/auth/services/auth.service';
 import { LoginService } from './services/login.service';
 import { BuyerService } from './services/buyer.service';
 import { SellerService } from './services/seller.service';
 import { ProductService } from './services/product.service';
 import {  TokenInterceptor } from './guards/auth.http';
 import { AgGridModule } from "ag-grid-angular";
+import { AuthService } from './services/auth.service';
 
 
 
@@ -38,6 +38,7 @@ import { AgGridModule } from "ag-grid-angular";
     BuyerService,
     SellerService,
     ProductService,
+    AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 
   ],
