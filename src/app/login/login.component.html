@@ -1,7 +1,5 @@
 
 <div class="d-flex flex-column flex-lg-row flex-column-fluid">
-  <ngx-spinner type="square-jelly-box"></ngx-spinner>
-
   <!--begin::Body-->
   <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
     <!--begin::Form-->
@@ -108,9 +106,21 @@
 
 <!--begin::Action-->
 <div class="d-grid mb-10">
-  <button type="submit" id="kt_sign_in_submit" class="btn btn-primary" [disabled]="loginForm.invalid">
-    Continue
-  </button>
+  <button
+  type="submit"
+  id="kt_sign_in_submit" 
+  class="btn btn-primary"
+  [disabled]="isLoading || loginForm.invalid">
+  <ng-container *ngIf="!isLoading">Continue</ng-container>
+  <ng-container *ngIf="isLoading">
+    <span clas="indicator-progress" [style.display]="'block'">
+      Please wait...{{ " " }}
+      <span
+        class="spinner-border spinner-border-sm align-middle ms-2"
+      ></span>
+    </span>
+  </ng-container>
+</button>
 </div>
 
 <div class="text-gray-500 text-center fw-semibold fs-6">

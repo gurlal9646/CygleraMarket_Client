@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,23 +18,25 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   hasError: boolean;
   returnUrl: string;
-  isLoading$: Observable<boolean>;
   user: UserType;
-  // private fields
-  private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoading: boolean;
+  private unsubscribe: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
     private _loginService: LoginService,
     private route: ActivatedRoute,
     private router: Router,
-    private spinner: NgxSpinnerService,
-    private authService:AuthService
+    private authService: AuthService
   ) {
-    this.isLoading$ = this.authService.isLoading$;
+    const loadingSubscr = this.isLoading$
+      .asObservable()
+      .subscribe((res) => (this.isLoading = res));
+    this.unsubscribe.push(loadingSubscr);
     // redirect to home if already logged in
-    if (this.authService.getcurrentUserValue()) {
-      this.router.navigate(['/']);
+    if (this.authService.getcurrentUserValue().token) {
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -44,7 +46,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.returnUrl =
       this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
   }
-
 
   // convenience getter for easy access to form fields
   get f() {
@@ -70,59 +71,54 @@ export class LoginComponent implements OnInit, OnDestroy {
           Validators.maxLength(100),
         ]),
       ],
-      roleId:[
-        '0'
-      ]
+      roleId: ['0'],
     });
   }
 
-
   async submit() {
     this.hasError = false;
-    this.spinner.show();
+    this.isLoading$.next(true);
     const loginResponse = await this._loginService.generateToken(
       this.loginForm.value
     );
     if (loginResponse.code == 1) {
       this.user = {
-        token:loginResponse.data.token,
+        token: loginResponse.data.token,
         roleId: loginResponse.data.roleId,
         firstName: loginResponse.data.firstName,
         lastName: loginResponse.data.lastName,
-        email:loginResponse.data.email
+        email: loginResponse.data.email,
       };
       this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);
     } else if (loginResponse.subcode == 2) {
       this.showLoginOptions();
-    }
-    else{
+    } else {
       Swal.fire({
         position: 'center',
         icon: 'info',
         title: loginResponse.message,
-        showCloseButton:true,
+        showCloseButton: true,
       });
     }
 
-    this.spinner.hide();
+    this.isLoading$.next(false);
   }
 
-  
   showLoginOptions() {
     Swal.fire({
       position: 'center',
       icon: 'info',
       title: 'Please select your account type:',
       showConfirmButton: false,
-      showCloseButton:true,
+      showCloseButton: true,
       html: `
         <div style="text-align: center;">
           <button class="swal2-confirm swal2-styled swal-button--buyer">Buyer</button>
           <button class="swal2-confirm swal2-styled swal-button--seller">Seller</button>
           <button class="swal2-confirm swal2-styled swal-button--admin">Admin</button>
         </div>
-      `
+      `,
     });
 
     // Handling button clicks using event delegation
@@ -147,7 +143,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         Swal.close();
         this.submit();
       }
-    
     });
   }
 

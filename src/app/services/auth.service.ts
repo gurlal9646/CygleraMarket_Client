@@ -19,7 +19,7 @@ export class AuthService implements OnDestroy {
 
   getcurrentUserValue(): UserModel {
     const storedModel = localStorage.getItem('currentuser');
-    return storedModel ? JSON.parse(storedModel) : null;
+    return storedModel ? JSON.parse(storedModel) : new UserModel();
   }
 
   setcurrentUserValue(user: UserModel) {
