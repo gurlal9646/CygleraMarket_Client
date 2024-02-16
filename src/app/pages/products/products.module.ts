@@ -20,6 +20,10 @@ import { ManageProductsComponent } from './manage-products/manage-products.compo
       {
         path: 'add',
         component: ManageProductsComponent
+      },
+      {
+        path:'editproduct/:productId',
+        component:ManageProductsComponent
       }
     ]),
     AgGridModule,

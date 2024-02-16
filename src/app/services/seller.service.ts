@@ -12,7 +12,7 @@ export class SellerService {
   constructor(private _http: HttpClient) { }
 
   async register(data: any): Promise<ApiResponse> {
-    const url = `${environment.apiUrl}/buyer/register`;;
+    const url = `${environment.apiUrl}/seller/register`;;
     try {
       const headers = new HttpHeaders().set('No-Auth', 'true');
       const response = await firstValueFrom(

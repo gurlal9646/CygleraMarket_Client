@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { ThemeModeService } from 'src/app/_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -29,7 +30,8 @@ export class ProductListingComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private modeService: ThemeModeService
+    private modeService: ThemeModeService,
+    private router:Router
   ) {
     ProductListingComponent.that = this;
 
@@ -160,6 +162,7 @@ export class ProductListingComponent implements OnInit {
     editBtn.addEventListener('click', () => {
       // Handle edit button click
       console.log('Edit button clicked for id:', param.data._id);
+      ProductListingComponent.that.router.navigate([`/products/editproduct/${param.data._id}`]);
     });
 
     deleteBtn.addEventListener('click', () => {
@@ -184,7 +187,7 @@ export class ProductListingComponent implements OnInit {
               showConfirmButton:false,
               timer:5000
             });
-            this.ngOnInit();
+            ProductListingComponent.that.ngOnInit();
           }
         }
       });

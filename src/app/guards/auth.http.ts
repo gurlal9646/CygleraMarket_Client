@@ -11,11 +11,12 @@ export class TokenInterceptor implements HttpInterceptor {
   user:UserModel;
   constructor(private router: Router,
     private authService:AuthService) {
-    this.user = this.authService.getcurrentUserValue();
 
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.user = this.authService.getcurrentUserValue();
+
     // Check if the request contains a No-Auth header
     if (request.headers.has('No-Auth')) {
       return next.handle(request); // Pass the request without modification

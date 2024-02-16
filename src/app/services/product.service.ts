@@ -23,6 +23,19 @@ export class ProductService {
     }
   }
 
+  async getProductById(id:string): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/product/getProducts/${id}`;
+    try {
+      const response = await firstValueFrom(this._http.get(url));
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
+
   async addProduct(data: any): Promise<ApiResponse> {
     const url = `${environment.apiUrl}/product/addProduct`;
     try {
