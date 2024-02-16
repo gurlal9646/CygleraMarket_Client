@@ -13,6 +13,26 @@ const Routing: Routes = [
     loadChildren: () => import('./products/products.module').then((m) => m.ProductsModule),
   },
   {
+    path: 'services',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./services/services.module').then((m) => m.ServicesModule),
+  },
+  {
+    path: 'programs',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./programs/programs.module').then((m) => m.ProgramsModule),
+  },
+  {
+    path: 'contracts',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./contracts/contracts.module').then((m) => m.ContractsModule),
+  },
+  {
+    path: 'profile',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
