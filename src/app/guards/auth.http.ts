@@ -11,7 +11,6 @@ import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { UserModel } from '../models/user.model';
 import { AuthService } from '../services/auth.service';
-import jwt from 'jsonwebtoken';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -30,23 +29,14 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     if (this.user.token !== '') {
-      // Decode the token
-      const token = this.user.token;
-      const decodedToken: any = jwt.decode(token);
-      if (
-        decodedToken &&
-        decodedToken.iat &&
-        decodedToken.iat > Date.now() / 1000
-      ) {
-        // Attach the token to the request
-        request = request.clone({
-          setHeaders: {
-            Authorization: `Bearer ${this.user.token}`,
-          },
-        });
-      } else {
-        this.router.navigate(['/error/401']); // Redirect to error page if token is not available
-      }
+      // Attach the token to the request
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
+    } else {
+      this.router.navigate(['/error/401']); // Redirect to error page if token is not available
     }
 
     return next.handle(request).pipe(
