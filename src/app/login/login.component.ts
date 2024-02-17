@@ -100,6 +100,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         title: loginResponse.message,
         showCloseButton: true,
       });
+      this.isLoading$.next(false);
+
     }
 
     this.isLoading$.next(false);

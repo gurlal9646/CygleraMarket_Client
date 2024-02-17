@@ -5,18 +5,24 @@ import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductListingComponent } from './product-listing/product-listing.component';
 import { ManageProductsComponent } from './manage-products/manage-products.component';
+import { ProductListingBuyerComponent } from './product-listing-buyer/product-listing-buyer.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
 @NgModule({
-  declarations: [ProductListingComponent,ManageProductsComponent],
+  declarations: [ProductListingComponent,ProductListingBuyerComponent,ManageProductsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'seller',
         component: ProductListingComponent
       },   
+      {
+        path: 'buyer',
+        component: ProductListingBuyerComponent
+      },  
       {
         path: 'add',
         component: ManageProductsComponent
@@ -29,6 +35,7 @@ import { ManageProductsComponent } from './manage-products/manage-products.compo
     AgGridModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
 
 
   ]

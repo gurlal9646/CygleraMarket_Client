@@ -81,7 +81,7 @@ export class ManageProductsComponent implements OnInit, OnDestroy {
         showConfirmButton: false,
         timer: 5000,
       });
-      this.router.navigate(['/products']);
+      this.router.navigate(['/products/seller']);
     } else {
       Swal.fire({
         position: 'center',

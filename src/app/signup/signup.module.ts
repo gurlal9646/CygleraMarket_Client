@@ -2,15 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SignupRoutingModule } from './signup-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BuyerComponent } from './buyer/buyer.component';
-import { SellerComponent } from './seller/seller.component';
-
-
+import { SignupComponent } from './signup.component';
 
 @NgModule({
   declarations: [
-    BuyerComponent,
-    SellerComponent
+    SignupComponent
   ],
   imports: [
     CommonModule,

@@ -14,7 +14,7 @@
 
     <!-- Products -->
     <div class="menu-item">
-      <a class="menu-link without-sub" routerLink="/products" routerLinkActive="active">
+      <a class="menu-link without-sub"    [routerLink]="user.roleId === 1 ? '/products/buyer' : '/products/seller'"  routerLinkActive="active">
         <span class="menu-icon">
           <app-keenicon name="switch" class="fs-2"></app-keenicon>
         </span>

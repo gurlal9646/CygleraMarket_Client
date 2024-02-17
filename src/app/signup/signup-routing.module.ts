@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BuyerComponent } from './buyer/buyer.component';
-import { SellerComponent } from './seller/seller.component';
+import { SignupComponent } from './signup.component';
 
-const routes: Routes = [{ path: 'buyer', component: BuyerComponent },
-{ path: 'seller', component: SellerComponent }];
+const routes: Routes = [{ path: ':userType', component: SignupComponent },
+{ path: ':userType', component: SignupComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

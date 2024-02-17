@@ -16,7 +16,7 @@
           <!--begin::Heading-->
           <div class="text-center mb-11">
             <!--begin::Title-->
-            <h1 class="text-gray-900 fw-bolder mb-3">Sign Up as Seller</h1>
+            <h1 class="text-gray-900 fw-bolder mb-3">Sign Up as {{heading | titlecase}}</h1>
             <!--end::Title-->
           </div>
           <!--begin::Heading-->
@@ -512,9 +512,7 @@
                     'is-valid': registrationForm.controls['city'].valid
                   }"
                 >
-                <option value="" disabled selected>
-                  Select City
-                </option>
+                  <option value="" disabled selected>Select City</option>
                   <ng-container *ngIf="registrationForm.get('state')!.value">
                     <option
                       *ngFor="
@@ -543,45 +541,47 @@
   
           <!--end::Form group-->
   
-          
           <!--begin::Form group-->
           <div class="row">
-              <!-- Postal Code -->
-            
-                <div class="fv-row mb-8">
-                  <label class="form-label fw-bolder text-gray-900 fs-6"
-                    >Postal Code</label
-                  >
-                  <input
-                    class="form-control bg-transparent"
-                    type="text"
-                    name="postalCode"
-                    formControlName="postalCode"
-                    placeholder="Postal Code"
-                    autocomplete="off"
-                    [ngClass]="{
-                      'is-invalid':
-                        registrationForm.controls['postalCode'].invalid &&
-                        (registrationForm.controls['postalCode'].touched ||
-                          registrationForm.controls['postalCode'].dirty),
-                      'is-valid': registrationForm.controls['postalCode'].valid
-                    }"
-                  />
-                  <ng-container
-                    [ngTemplateOutlet]="formError"
-                    [ngTemplateOutletContext]="{
-                      validation: 'required',
-                      message: 'PostalCode is required',
-                      control: registrationForm.controls['postalCode']
-                    }"
-                  ></ng-container>
-                </div>
-              
-    
+            <!-- Postal Code -->
   
+            <div class="fv-row mb-8">
+              <label class="form-label fw-bolder text-gray-900 fs-6"
+                >Postal Code</label
+              >
+              <input
+                class="form-control bg-transparent"
+                type="text"
+                name="postalCode"
+                formControlName="postalCode"
+                placeholder="Postal Code"
+                autocomplete="off"
+                oninput="this.value = this.value.toUpperCase()"
+                [ngClass]="{
+                  'is-invalid':
+                    registrationForm.controls['postalCode'].invalid &&
+                    (registrationForm.controls['postalCode'].touched ||
+                      registrationForm.controls['postalCode'].dirty),
+                  'is-valid': registrationForm.controls['postalCode'].valid
+                }"
+              />
+              <ng-container
+                [ngTemplateOutlet]="formError"
+                [ngTemplateOutletContext]="{
+                  validation: registrationForm.controls['postalCode'].errors
+                    ?.pattern
+                    ? 'pattern'
+                    : 'required',
+                  message: registrationForm.controls['postalCode'].errors?.pattern
+                    ? 'PostalCode does not match the expected format'
+                    : 'PostalCode is required',
+                  control: registrationForm.controls['postalCode']
+                }"
+              ></ng-container>
             </div>
-    
-            <!--end::Form group-->
+          </div>
+  
+          <!--end::Form group-->
   
           <!--begin::Form group-->
           <div class="row">
@@ -599,12 +599,12 @@
                   formControlName="password"
                   autocomplete="off"
                   [ngClass]="{
-                      'is-invalid':
-                        registrationForm.controls['password'].invalid &&
-                        (registrationForm.controls['password'].touched ||
-                          registrationForm.controls['password'].dirty),
-                      'is-valid': registrationForm.controls['password'].valid
-                    }"
+                    'is-invalid':
+                      registrationForm.controls['password'].invalid &&
+                      (registrationForm.controls['password'].touched ||
+                        registrationForm.controls['password'].dirty),
+                    'is-valid': registrationForm.controls['password'].valid
+                  }"
                 />
                 <ng-container
                   [ngTemplateOutlet]="formError"
@@ -646,12 +646,12 @@
                   autocomplete="off"
                   formControlName="cPassword"
                   [ngClass]="{
-                      'is-invalid':
-                        registrationForm.controls['cPassword'].invalid &&
-                        (registrationForm.controls['cPassword'].touched ||
-                          registrationForm.controls['cPassword'].dirty),
-                      'is-valid': registrationForm.controls['cPassword'].valid
-                    }"
+                    'is-invalid':
+                      registrationForm.controls['cPassword'].invalid &&
+                      (registrationForm.controls['cPassword'].touched ||
+                        registrationForm.controls['cPassword'].dirty),
+                    'is-valid': registrationForm.controls['cPassword'].valid
+                  }"
                 />
                 <ng-container
                   [ngTemplateOutlet]="formError"
@@ -710,10 +710,10 @@
                 class="form-check-label fw-semibold text-gray-700 fs-base ms-1"
               >
                 I Accept the&nbsp;<a
-                  href="https://keenthemes.com/metronic/?page=faq"
+                  href="#"
                   target="_blank"
                   class="ms-1 link-primary"
-                  >Terms</a
+                  >Terms & Conditions</a
                 >.
               </span>
             </label>
@@ -727,15 +727,23 @@
               id="kt_sign_up_submit"
               [disabled]="
                 registrationForm.invalid ||
+                isLoading ||
                 !registrationForm.controls['agree'].value
               "
               class="btn btn-primary"
             >
-              <ng-container>
-                <span class="indicator-label">Submit</span>
+              <ng-container *ngIf="!isLoading">Submit</ng-container>
+              <ng-container *ngIf="isLoading">
+                <span clas="indicator-progress" [style.display]="'block'">
+                  Please wait...{{ " " }}
+                  <span
+                    class="spinner-border spinner-border-sm align-middle ms-2"
+                  ></span>
+                </span>
               </ng-container>
             </button>
           </div>
+
           <!--end::Form group-->
   
           <!--begin::Sign up-->
