@@ -15,6 +15,7 @@ import { ProductService } from './services/product.service';
 import {  TokenInterceptor } from './guards/auth.http';
 import { AgGridModule } from "ag-grid-angular";
 import { AuthService } from './services/auth.service';
+import { CygleraService } from './services/cygleraservice.service';
 
 
 
@@ -39,6 +40,7 @@ import { AuthService } from './services/auth.service';
     SellerService,
     ProductService,
     AuthService,
+    CygleraService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 
   ],

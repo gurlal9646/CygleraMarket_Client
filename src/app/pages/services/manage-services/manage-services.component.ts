@@ -2,9 +2,9 @@ import { Component,OnDestroy,OnInit } from '@angular/core';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { ActivatedRoute,Router } from '@angular/router';
 import { BehaviorSubject,Subscription } from 'rxjs';
-import { ServiceService} from '/api/service/getServices';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
+import { CygleraService } from 'src/app/services/cygleraservice.service';
 
 @Component({
   selector: 'app-manage-services',
@@ -20,7 +20,7 @@ export class ManageServicesComponent implements OnInit, OnDestroy {
   heading: string = 'Add';
   constructor(
     private fb: FormBuilder,
-    private serviceService: ServiceService,
+    private cygleraService: CygleraService,
     private router: Router,
     private _avRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef
@@ -50,7 +50,7 @@ export class ManageServicesComponent implements OnInit, OnDestroy {
 
   async getServiceDetails(id: string) {
     try {
-      const response = await this.serviceService.getServices(id);
+      const response = await this.cygleraService.getServiceById(id);
       if(response.code == 1) {
         this.serviceForm.patchValue(response.data[0]);
         this.cdr.detectChanges();
@@ -62,14 +62,14 @@ export class ManageServicesComponent implements OnInit, OnDestroy {
 
   async saveService() {
     this.isLoading$.next(true);
-    const response = await this.serviceService.Add (
+    const response = await this.cygleraService.addService (
         this.serviceForm.value
     );
     if(response.code == 1) {
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'response.message',
+        title: response.message,
         showConfirmButton: false,
         timer: 5000,
       });
@@ -78,7 +78,7 @@ export class ManageServicesComponent implements OnInit, OnDestroy {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: 'response.message',
+        title: response.message,
         timer: 5000,
       });
     }

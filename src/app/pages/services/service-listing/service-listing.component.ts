@@ -1,10 +1,10 @@
 import { Component,OnInit } from '@angular/core';
-import {ServiceService} from '/api/service/getServices';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { ThemeModeService } from 'src/app/_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { CygleraService } from 'src/app/services/cygleraservice.service';
 @Component({
   selector: 'app-service-listing',
   templateUrl: './service-listing.component.html',
@@ -28,7 +28,7 @@ export class ServiceListingComponent implements OnInit {
   static that:any;
 
   constructor(
-    private serviceService: ServiceService,
+    private cygleraService: CygleraService,
     private modeService: ThemeModeService,
     private router: Router
   ) {
@@ -177,7 +177,7 @@ export class ServiceListingComponent implements OnInit {
         confirmButtonText: 'Yes, delete it!',
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await  ServiceListingComponent.that.serviceService.delete(param.data._id);
+          const response = await  ServiceListingComponent.that.cygleraService.deleteService(param.data._id);
           if (response.code == 1) {
             Swal.fire({
               position: 'center',
@@ -204,7 +204,7 @@ export class ServiceListingComponent implements OnInit {
   }
 
   async GetServices() {
-    const response = await this.serviceService.getServices();
+    const response = await this.cygleraService.getServices();
     if (response.code == 1) {
       this.serviceList = response.data;
       if (this.gridApiMembers) {
