@@ -1,1 +1,55 @@
-<p>service-listing works!</p>
+<div class="card">
+    <div class="card-header border-0 pt-6">
+      <!--begin::Card title-->
+      <div class="card-title">
+        <!--begin::Search-->
+        <div class="d-flex align-items-center position-relative my-1">
+          <input
+            type="text"
+            data-action="filter"
+            class="form-control form-control-solid w-250px ps-12"
+            placeholder="Search Services"
+            (keyup)="quicksearch()"
+            [(ngModel)]="searchvalue"
+          />
+        </div>
+        <!--end::Search-->
+      </div>
+      <!--begin::Card title-->
+  
+      <!--begin::Card toolbar-->
+      <div class="card-toolbar">
+        <!--begin::Toolbar-->
+        <div class="d-flex justify-content-end">
+          <!--begin::Add user-->
+          <button type="button" class="btn btn-primary"  [routerLink]="['/serivces/add']">
+            Add Service
+          </button>
+          <!--end::Add user-->
+        </div>
+        <!--end::Toolbar-->
+      </div>
+      <!--end::Card toolbar-->
+    </div>
+  
+    <div class="card-body pt-0">
+      <!--Grid code-->
+      <ag-grid-angular
+        id="productList"
+        style="width: 100%; height: calc(100vh - 350px)"
+        [columnDefs]="columnDefsUsers"
+        [defaultColDef]="defaultColDef"
+        [enableRangeSelection]="true"
+        [paginationPageSize]="paginationPageSize"
+        [pagination]="true"
+        [gridOptions]="gridOptions"
+        [suppressRowClickSelection]="true"
+        [rowSelection]="rowSelection"
+        (selectionChanged)="onSelectionChanged($event)"
+        [overlayLoadingTemplate]="overlayLoadingTemplate"
+        (gridReady)="onGridReadyMember($event)"
+        aria-hidden="true"
+      ></ag-grid-angular>
+    </div>
+  </div>
+  
