@@ -2,6 +2,8 @@ import { Component, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/c
 import { NgForm } from '@angular/forms';
 import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 
 @Component({
@@ -23,7 +25,8 @@ export class ProductListingBuyerComponent implements  OnInit {
   };
   private clickListener: () => void;
 
-  constructor(private productService:ProductService, private modalService: NgbModal,private renderer: Renderer2){
+  constructor(private productService:ProductService, private modalService: NgbModal,private renderer: Renderer2,
+    private cdr: ChangeDetectorRef){
     
   }
 
@@ -54,7 +57,7 @@ export class ProductListingBuyerComponent implements  OnInit {
     const response = await this.productService.getProducts();
     if (response.code == 1) {
       this.productList = response.data;
-      console.log(this.productList);
+      this.cdr.detectChanges();  
     }
   }
 
@@ -66,8 +69,6 @@ export class ProductListingBuyerComponent implements  OnInit {
 
   addQuantity() {
     this.quantity = 0;
-    this.modalService.open(this.formModal, this.modalConfig);
-
   }
 
 }

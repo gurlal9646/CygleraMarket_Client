@@ -16,7 +16,17 @@
                     <!--begin::Card body-->
                     <div class="card-body pt-1">
                         <!--begin::Users-->
-                        <div class="fw-bold text-gray-600 mb-5">Price: {{ product.price  }}</div>
+                        <div class="fw-bold text-gray-600 mb-5">Description: {{ product.description }} </div>
+                        <div class="fw-bold text-gray-600 mb-5">Price: {{ product.price | currency:'CAD':true:'1.2-2' }} </div>
+                        <div class="fw-bold text-gray-600 mb-5">Category: {{ product.category  }}</div>
+                        <div class="fw-bold text-gray-600 mb-5">Manufacturer: {{ product.manufacturer  }}</div>
+                        <div *ngIf="product.stockQuantity > 0; else outOfStock">
+                          <span class="badge bg-success">In Stock</span>
+                      </div>
+                      <ng-template #outOfStock>
+                          <span class="badge bg-danger">Out of Stock</span>
+                      </ng-template>
+
                         <!--end::Users-->
                     </div>
                     <!--end::Card body-->
@@ -38,7 +48,7 @@
 <ng-template #formModal let-modal>
     <form #myForm="ngForm" (ngSubmit)="onSubmit($event, myForm)">
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Role Details</h4>
+        <h4 class="modal-title" id="modal-basic-title">Product Quantity Details</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
       </div>
       <div class="modal-body">
