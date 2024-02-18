@@ -1,11 +1,11 @@
 <!--begin::Row-->
 <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
   <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
-    <app-cards-widget20 cssClass="h-md-50 mb-5 mb-xl-10" description="Active Projects" color="#F1416C"
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10" *ngIf="apiCallsCompleted">
+    <app-cards-widget20 cssClass="h-md-50 mb-5 mb-xl-10" description="Active Products" color="#F1416C" [productCount]="productCount"
       img="./assets/media/patterns/vector-1.png"></app-cards-widget20>
 
-    <app-cards-widget7 cssClass="h-md-50 mb-5 mb-xl-10" [icon]="false" [stats]="357" description="Professionals"
+    <app-cards-widget7 cssClass="h-md-50 mb-5 mb-xl-10" [icon]="false" [stats]="serviceCount" description="Professionals"
       labelColor="dark" textColor="gray-300"></app-cards-widget7>
   </div>
   <!--end::Col-->

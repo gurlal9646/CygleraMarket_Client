@@ -10,6 +10,7 @@ export class CardsWidget20Component implements OnInit {
   @Input() description: string = '';
   @Input() color: string = '';
   @Input() img: string = '';
+  @Input() productCount: number = 0;
   constructor() {}
 
   ngOnInit(): void {}

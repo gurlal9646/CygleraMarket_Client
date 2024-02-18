@@ -9,7 +9,7 @@ export class CardsWidget7Component implements OnInit {
   @Input() cssClass: string = '';
   @Input() icon: boolean = false;
   @Input() stats: number = 357;
-  @Input() description: string = 'Professionals';
+  @Input() description: string = 'Services';
   @Input() labelColor: string = 'dark';
   @Input() textColor: string = 'gray-300';
   items: Array<{ name: string; initials?: string; state?: string, src?: string }>;
