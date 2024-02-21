@@ -17,9 +17,11 @@
                     <div class="card-body pt-1">
                         <!--begin::Users-->
                         <div class="fw-bold text-gray-600 mb-5">Description: {{ product.description }} </div>
-                        <div class="fw-bold text-gray-600 mb-5">Price: {{ product.price | currency:'CAD':true:'1.2-2' }} </div>
+                        <div class="fw-bold text-gray-600 mb-5">Price: {{ product.price | currency:'CAD':'symbol':'1.2-2' }} </div>
                         <div class="fw-bold text-gray-600 mb-5">Category: {{ product.category  }}</div>
                         <div class="fw-bold text-gray-600 mb-5">Manufacturer: {{ product.manufacturer  }}</div>
+                        <div class="fw-bold text-gray-600 mb-5">Seller: {{ product.seller.companyName  }}</div>
+
                         <div *ngIf="product.stockQuantity > 0; else outOfStock">
                           <span class="badge bg-success">In Stock</span>
                       </div>
@@ -32,7 +34,7 @@
                     <!--end::Card body-->
                     <!--begin::Card footer-->
                     <div class="card-footer flex-wrap pt-0">
-                        <button type="button" class="btn btn-primary" data-action="addQuantity">Request for approval</button>
+                        <button type="button" class="btn btn-primary" [attr.data-productid]="product._id" [attr.data-price]="product.price" [attr.data-sellerid]="product.seller._id" data-action="addQuantity">Request for approval</button>
                     </div>
                     <!--end::Card footer-->
                 </div>
@@ -69,7 +71,7 @@
               <label class="required fw-semibold fs-6 mb-2">Enter Quantity</label>
               <!--end::Label-->
               <!--begin::Input-->
-              <input type="number" class="form-control form-control-solid" name="name" [(ngModel)]="quantity" #name="ngModel" required />
+              <input type="number" class="form-control form-control-solid" name="quantity" [(ngModel)]="quantity" #name="ngModel" required />
               <!--end::Input-->
             </div>
             <!--end::Input group-->

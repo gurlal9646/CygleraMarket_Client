@@ -23,6 +23,11 @@ const Routing: Routes = [
     loadChildren: () => import('./programs/programs.module').then((m) => m.ProgramsModule),
   },
   {
+    path: 'approvals',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./requestforapproval/requestforapproval.module').then((m) => m.RequestforapprovalModule),
+  },
+  {
     path: 'contracts',
     canActivate: [AuthGuard],
     loadChildren: () => import('./contracts/contracts.module').then((m) => m.ContractsModule),
