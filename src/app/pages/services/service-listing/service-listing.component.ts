@@ -71,7 +71,7 @@ export class ServiceListingComponent implements OnInit {
   async GridFieldsLoad() {
     let Name = 'Name';
     let Price = 'Price';
-    let Descritpion = 'Description';
+    let Description = 'Description';
     let CreatedDate = 'CreatedDate';
     let Action = 'Action';
     const columnDefs = [
@@ -87,7 +87,7 @@ export class ServiceListingComponent implements OnInit {
       {
         headerName: Price,
         field: 'price',
-        toolTipField: 'Price',
+        tooltipField: 'price',
         headerTooltip: Price,
         autoHeight: true,
         cellClass: ['cursor-pointer', 'agTooltip', 'clippingText'],
@@ -96,10 +96,10 @@ export class ServiceListingComponent implements OnInit {
         flex: 1,
       },
       {
-        headerName: Descritpion,
+        headerName: Description,
         field: 'description',
-        toolTipField: 'Descritpion',
-        headerTooltip: Descritpion,
+        tooltipField: 'description',
+        headerTooltip: Description,
         autoHeight: true,
         cellClass: ['cursor-pointer', 'agTooltip', 'clippingText'],
         width: 210,
