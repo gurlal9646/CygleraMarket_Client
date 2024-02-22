@@ -275,6 +275,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         title: response.message,
         showCloseButton: true,
       });
+      this.isLoading$.next(false);
     }
     this.isLoading$.next(false);
 
