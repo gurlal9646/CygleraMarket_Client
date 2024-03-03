@@ -73,7 +73,7 @@ export class ManageServicesComponent implements OnInit, OnDestroy {
         showConfirmButton: false,
         timer: 5000,
       });
-      this.router.navigate(['/services']);
+      this.router.navigate(['/services/seller']);
     } else {
       Swal.fire({
         position: 'center',

@@ -15,17 +15,19 @@ import { RequestForApprovalService } from 'src/app/services/rfa.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { EntityType } from 'src/app/models/Enums';
-
+import { CygleraService } from 'src/app/services/cygleraservice.service';
 @Component({
-  selector: 'app-product-listing-buyer',
-  templateUrl: './product-listing-buyer.component.html',
-  styleUrl: './product-listing-buyer.component.scss',
+  selector: 'app-service-listing-buyer',
+  templateUrl: './service-listing-buyer.component.html',
+  styleUrl: './service-listing-buyer.component.scss'
 })
-export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDestroy {
-  productList: any = [];
+export class ServiceListingBuyerComponent implements OnInit, AfterViewInit, OnDestroy {
+  serviceList: any = [];
   isLoading = false;
   quantity: number = 0;
   isCollapsed1 = false;
+  fromDate:Date = new Date();
+  toDate:Date;
 
   @ViewChild('formModal')
   formModal: TemplateRef<any>;
@@ -34,12 +36,12 @@ export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
   };
   private clickListener: () => void;
-  productId: any;
+  serviceId: any;
   sellerId: any;
   price: any;
 
   constructor(
-    private productService: ProductService,
+    private cygleraService: CygleraService,
     private modalService: NgbModal,
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
@@ -54,13 +56,13 @@ export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     this.clickListener = this.renderer.listen(document, 'click', (event) => {
       const closestBtn = event.target.closest('.btn');
       if (closestBtn) {
-        const { action,productid,sellerid,price } = closestBtn.dataset;
+        const { action,serviceid,sellerid,price } = closestBtn.dataset;
         switch (action) {
           case 'addQuantity':
-            this.productId = productid;
+            this.serviceId = serviceid;
             this.sellerId = sellerid;
             this.price = price;
-            console.log(this.productId);
+            console.log(this.serviceId);
             this.modalService.open(this.formModal, this.modalConfig);
             break;
 
@@ -79,9 +81,9 @@ export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDe
   }
 
   async GetProducts() {
-    const response = await this.productService.getProducts();
+    const response = await this.cygleraService.getServices();
     if (response.code == 1) {
-      this.productList = response.data;
+      this.serviceList = response.data;
       this.cdr.detectChanges();
     }
   }
@@ -91,8 +93,8 @@ export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDe
       return;
     }
     const request = {
-      type:EntityType.PRODUCT,
-      itemUniqueId:this.productId,
+      type:EntityType.SERVICE,
+      itemUniqueId:this.serviceId,
       sellerUniqueId:this.sellerId,
       quantity: myForm.value['quantity'],
       price: myForm.value['quantity'] * this.price

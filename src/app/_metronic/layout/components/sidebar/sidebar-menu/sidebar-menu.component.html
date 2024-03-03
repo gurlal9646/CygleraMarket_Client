@@ -24,7 +24,7 @@
 
      <!-- Services -->
      <div class="menu-item">
-      <a class="menu-link without-sub" routerLink="/services" routerLinkActive="active">
+      <a class="menu-link without-sub"  [routerLink]="user.roleId === 1 ? '/services/buyer' : '/services/seller'" routerLinkActive="active">
         <span class="menu-icon">
           <app-keenicon name="element-plus" class="fs-2"></app-keenicon>
         </span>

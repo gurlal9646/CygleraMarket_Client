@@ -5,18 +5,24 @@ import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ServiceListingComponent } from './service-listing/service-listing.component';
 import { ManageServicesComponent } from './manage-services/manage-services.component';
+import { ServiceListingBuyerComponent } from './service-listing-buyer/service-listing-buyer.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
 @NgModule({
-  declarations: [ServiceListingComponent, ManageServicesComponent],
+  declarations: [ServiceListingBuyerComponent,ServiceListingComponent, ManageServicesComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'seller',
         component: ServiceListingComponent
-      },   
+      }, 
+      {
+        path: 'buyer',
+        component: ServiceListingBuyerComponent
+      },  
       {
         path: 'add',
         component: ManageServicesComponent
@@ -29,6 +35,7 @@ import { ManageServicesComponent } from './manage-services/manage-services.compo
     AgGridModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule
   ]
 })
 export class ServicesModule { }
