@@ -1,1 +1,107 @@
-<p>manage-programs works!</p>
+<div class="card mb-5 mb-xl-10">
+    <div
+      class="card-header border-0 cursor-pointer"
+      role="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#kt_account_profile_details"
+      aria-expanded="true"
+      aria-controls="kt_account_profile_details"
+    >
+      <div class="card-title m-0">
+        <h3 class="fw-bolder m-0">{{heading}} Program Details</h3>
+      </div>
+    </div>
+    <div id="kt_account_profile_details" class="collapse show">
+      <form novalidate="" class="form"  [formGroup]="programForm" (ngSubmit)="saveProgram()">
+        <div class="card-body border-top p-9">
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6"
+              > Name</label
+            >
+            <div class="col-lg-8 fv-row">
+              <input
+                type="text"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Name"
+                name="name"
+                formControlName="name" 
+              />
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label fw-bold fs-6"
+              ><span class="required">Description</span></label
+            >
+            <div class="col-lg-8 fv-row">
+              <textarea
+                type="tel"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Description..."
+                name="description"
+                formControlName="description" 
+              ></textarea>
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label fw-bold fs-6"
+              ><span class="required">Price</span></label
+            >
+            <div class="col-lg-8 fv-row">
+              <input
+                type="text"
+                class="form-control form-control-lg form-control-solid"
+                placeholder="Price"
+                name="price"
+                formControlName="price" 
+              />
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label fw-bold fs-6"
+              ><span class="required">Start Date</span></label
+            >
+            <div class="col-lg-8 fv-row">
+              <input
+                type="date"
+                class="form-control form-control-lg form-control-solid"
+                name="startDate"
+                formControlName="startDate" 
+              />
+            </div>
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label fw-bold fs-6"
+              ><span class="required">End Date</span></label
+            >
+            <div class="col-lg-8 fv-row">
+              <input
+                type="date"
+                class="form-control form-control-lg form-control-solid"
+                name="endDate"
+                formControlName="endDate" 
+              />
+            </div>
+          </div>
+        </div>
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isLoading || programForm.invalid"
+            (click)="saveProgram()"
+          >
+            <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+            <ng-container *ngIf="isLoading">
+              <span clas="indicator-progress" [style.display]="'block'">
+                Please wait...{{ " " }}
+                <span
+                  class="spinner-border spinner-border-sm align-middle ms-2"
+                ></span>
+              </span>
+            </ng-container>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

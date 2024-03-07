@@ -17,6 +17,8 @@ import { AgGridModule } from "ag-grid-angular";
 import { AuthService } from './services/auth.service';
 import { CygleraService } from './services/cygleraservice.service';
 import { RequestForApprovalService } from './services/rfa.service';
+import { ProgramService } from './services/program.service';
+import { ApprovalService } from './services/approval.service';
 
 
 
@@ -43,6 +45,8 @@ import { RequestForApprovalService } from './services/rfa.service';
     AuthService,
     CygleraService,
     RequestForApprovalService,
+    ProgramService,
+    ApprovalService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 
   ],

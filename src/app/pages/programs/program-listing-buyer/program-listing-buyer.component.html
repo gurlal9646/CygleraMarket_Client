@@ -1,5 +1,5 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
-    <ng-container *ngFor="let service of serviceList">
+    <ng-container *ngFor="let program of programList">
         <!--begin::Col-->
         <div class="col-md-4">
             <!--begin::Card-->
@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <!--begin::Card title-->
                     <div class="card-title">
-                        <h2>{{ service.name | titlecase }}</h2>
+                        <h2>{{ program.name | titlecase }}</h2>
                     </div>
                     <!--end::Card title-->
                 </div>
@@ -16,16 +16,18 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-1">
                     <!--begin::Users-->
-                    <div class="fw-bold text-gray-600 mb-5">Description: {{ service.description }} </div>
-                    <div class="fw-bold text-gray-600 mb-5">Seller: {{ service.seller.companyName  }}</div>
-
+                    <div class="fw-bold text-gray-600 mb-5">Description: {{ program.description }} </div>
+                    <div class="fw-bold text-gray-600 mb-5">Price: {{ program.price | currency:'CAD':'symbol':'1.2-2' }} </div>
+                    <div class="fw-bold text-gray-600 mb-5">Start Date: {{ program.startDate | date:'yyyy-MM-dd'  }}</div>
+                    <div class="fw-bold text-gray-600 mb-5">End Date: {{ program.endDate | date:'yyyy-MM-dd' }}</div>
+                    <div class="fw-bold text-gray-600 mb-5">Seller: {{ program.seller.companyName  }}</div>
 
                     <!--end::Users-->
                 </div>
                 <!--end::Card body-->
                 <!--begin::Card footer-->
                 <div class="card-footer flex-wrap pt-0">
-                    <button type="button" class="btn btn-primary" [attr.data-serviceid]="service.serviceId" [attr.data-price]="service.price" [attr.data-sellerid]="service.seller.sellerId" data-action="addQuantity">Request for approval</button>
+                    <button type="button" class="btn btn-primary" [attr.data-productid]="program.programId" [attr.data-price]="program.price" [attr.data-sellerid]="program.seller.sellerId" data-action="addQuantity">Request for approval</button>
                 </div>
                 <!--end::Card footer-->
             </div>
@@ -41,14 +43,14 @@
 <ng-template #formModal let-modal>
 <form #myForm="ngForm" (ngSubmit)="onSubmit($event, myForm)">
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Service Duration Details</h4>
+    <h4 class="modal-title" id="modal-basic-title">Program Member Count</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
     <div class="d-flex flex-column scroll-y me-n7 pe-7 mw-650px" id="kt_modal_update_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_customer_header" data-kt-scroll-wrappers="#kt_modal_update_customer_scroll"
       data-kt-scroll-offset="300px">
       <!--begin::User toggle-->
-      <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" role="button" (click)="collapse1.toggle()" [attr.aria-expanded]="!isCollapsed1" aria-controls="kt_modal_update_customer_user_info">Service Duration Information
+      <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" role="button" (click)="collapse1.toggle()" [attr.aria-expanded]="!isCollapsed1" aria-controls="kt_modal_update_customer_user_info">Program Member Count
         <span class="ms-2 rotate-180">
           <i class="ki-duotone ki-down fs-3" [ngClass]="{ 'ki-up': !isCollapsed1 }"></i>
         </span>
@@ -59,24 +61,14 @@
         <!--begin::Input group-->
         <div class="fv-row mb-7">
           <!--begin::Label-->
-          <label class="required fw-semibold fs-6 mb-2">Start Date</label>
+          <label class="required fw-semibold fs-6 mb-2">Enter Member Count</label>
           <!--end::Label-->
           <!--begin::Input-->
-          <input type="date" class="form-control form-control-solid" name="fromDate" [(ngModel)]="fromDate" #name="ngModel" required />
+          <input type="number" class="form-control form-control-solid" name="quantity" [(ngModel)]="quantity" #name="ngModel" required />
           <!--end::Input-->
         </div>
         <!--end::Input group-->
-         <!--begin::Input group-->
-         <div class="fv-row mb-7">
-            <!--begin::Label-->
-            <label class="required fw-semibold fs-6 mb-2">End Date</label>
-            <!--end::Label-->
-            <!--begin::Input-->
-            <input type="date" class="form-control form-control-solid" name="toDate" [(ngModel)]="toDate" #name="ngModel" required />
-            <!--end::Input-->
-          </div>
-          <!--end::Input group-->
-        </div>
+      </div>
       <!--end::User form-->
     </div>
   </div>
