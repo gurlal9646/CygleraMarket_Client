@@ -5,23 +5,27 @@ import { ApprovalListingComponent } from './approval-listing/approval-listing.co
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BuyerApprovalListingComponent } from './buyer-approval-listing/buyer-approval-listing.component';
 
 
 
 @NgModule({
-  declarations: [ApprovalListingComponent],
+  declarations: [ApprovalListingComponent,BuyerApprovalListingComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'buyer',
+        component: BuyerApprovalListingComponent
+      },
+      {
+        path: 'seller',
         component: ApprovalListingComponent
       }
     ]),
     AgGridModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
-  ]
+    NgbModule  ]
 })
 export class RequestforapprovalModule { }
