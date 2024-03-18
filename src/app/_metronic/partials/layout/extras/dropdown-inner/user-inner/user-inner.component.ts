@@ -18,6 +18,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   langs = languages;
   private unsubscribe: Subscription[] = [];
   user:UserModel;
+  userType:string = localStorage.getItem("roleId")?.toString() === '1'? "Seller" : "Buyer";
 
   constructor(
     private router:Router,
@@ -29,6 +30,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setLanguage(this.translationService.getSelectedLanguage());
+
   }
 
   logout() {

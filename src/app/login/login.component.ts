@@ -16,7 +16,6 @@ export type UserType = UserModel | undefined;
 })
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
-  hasError: boolean;
   returnUrl: string;
   user: UserType;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -76,7 +75,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    this.hasError = false;
     this.isLoading$.next(true);
     const loginResponse = await this._loginService.generateToken(
       this.loginForm.value

@@ -26,8 +26,8 @@ export class ServiceListingBuyerComponent implements OnInit, AfterViewInit, OnDe
   isLoading = false;
   quantity: number = 0;
   isCollapsed1 = false;
-  fromDate:Date = new Date();
-  toDate:Date;
+  startDate:Date = new Date();
+  endDate:Date;
 
   @ViewChild('formModal')
   formModal: TemplateRef<any>;
@@ -96,8 +96,9 @@ export class ServiceListingBuyerComponent implements OnInit, AfterViewInit, OnDe
       type:EntityType.SERVICE,
       itemUniqueId:this.serviceId,
       sellerUniqueId:this.sellerId,
-      quantity: myForm.value['quantity'],
-      price: myForm.value['quantity'] * this.price
+      startDate: myForm.value['startDate'],
+      endDate: myForm.value['endDate'],
+      price: this.calculateTotalPrice(myForm.value['startDate'],myForm.value['endDate'])
     };
 
     const response = await this.rfaService.addRequest(request);
@@ -119,6 +120,20 @@ export class ServiceListingBuyerComponent implements OnInit, AfterViewInit, OnDe
         timer: 5000,
       });
     }
+  }
+
+  calculateTotalPrice(sDate:any,eDate:any) {
+    const startDate = new Date(sDate);
+    const endDate = new Date(eDate);
+
+    // Calculate the difference in days between startDate and endDate
+    const timeDifference = endDate.getTime() - startDate.getTime();
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+    // Multiply the number of days by the price
+    const totalPrice = daysDifference * this.price;
+
+    return totalPrice;
   }
   ngOnDestroy(): void {
     if (this.clickListener) {

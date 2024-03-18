@@ -17,7 +17,8 @@
                 <div class="card-body pt-1">
                     <!--begin::Users-->
                     <div class="fw-bold text-gray-600 mb-5">Description: {{ service.description }} </div>
-                    <div class="fw-bold text-gray-600 mb-5">Seller: {{ service.seller.companyName  }}</div>
+                    <div class="fw-bold text-gray-600 mb-5"> Price: {{ service.price | currency:'CAD':'symbol':'1.2-2' }} (per day) </div>
+                    <div class="fw-bold text-gray-600 mb-5">Supplier: {{ service.seller.companyName  }}</div>
 
 
                     <!--end::Users-->
@@ -25,7 +26,7 @@
                 <!--end::Card body-->
                 <!--begin::Card footer-->
                 <div class="card-footer flex-wrap pt-0">
-                    <button type="button" class="btn btn-primary" [attr.data-serviceid]="service.serviceId" [attr.data-price]="service.price" [attr.data-sellerid]="service.seller.sellerId" data-action="addQuantity">Request for approval</button>
+                    <button type="button" class="btn btn-primary" [attr.data-serviceid]="service.serviceId" [attr.data-price]="service.price" [attr.data-sellerid]="service.seller.sellerId" data-action="addQuantity">Request for purchase</button>
                 </div>
                 <!--end::Card footer-->
             </div>
@@ -62,7 +63,7 @@
           <label class="required fw-semibold fs-6 mb-2">Start Date</label>
           <!--end::Label-->
           <!--begin::Input-->
-          <input type="date" class="form-control form-control-solid" name="fromDate" [(ngModel)]="fromDate" #name="ngModel" required />
+          <input type="date" class="form-control form-control-solid" name="startDate" [(ngModel)]="startDate" #name="ngModel"  required  [min]="startDate | date:'yyyy-MM-dd'" />
           <!--end::Input-->
         </div>
         <!--end::Input group-->
@@ -72,7 +73,7 @@
             <label class="required fw-semibold fs-6 mb-2">End Date</label>
             <!--end::Label-->
             <!--begin::Input-->
-            <input type="date" class="form-control form-control-solid" name="toDate" [(ngModel)]="toDate" #name="ngModel" required />
+            <input type="date" class="form-control form-control-solid" name="endDate" [(ngModel)]="endDate" #name="ngModel" required [min]="startDate | date:'yyyy-MM-dd'" />
             <!--end::Input-->
           </div>
           <!--end::Input group-->

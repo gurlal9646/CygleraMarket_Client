@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { LoginService } from '../services/login.service';
 import Swal from 'sweetalert2';
@@ -20,11 +20,16 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
   errorState: ErrorStates = ErrorStates.NotSubmitted;
   errorStates = ErrorStates;
-  isLoading$: Observable<boolean>;
-
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoading: boolean;
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-  constructor(private fb: FormBuilder, private loginService: LoginService) {}
+  constructor(private fb: FormBuilder, private loginService: LoginService) {
+    const loadingSubscr = this.isLoading$
+      .asObservable()
+      .subscribe((res) => (this.isLoading = res));
+    this.unsubscribe.push(loadingSubscr);
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -38,7 +43,7 @@ export class ForgotPasswordComponent implements OnInit {
   initForm() {
     this.forgotPasswordForm = this.fb.group({
       email: [
-        'admin@demo.com',
+        '',
         Validators.compose([
           Validators.required,
           Validators.email,
@@ -50,6 +55,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   async submit() {
+    this.isLoading$.next(true);
     this.errorState = ErrorStates.NotSubmitted;
     const response = await this.loginService.forgotPassword(
       this.forgotPasswordForm.value
@@ -68,6 +74,10 @@ export class ForgotPasswordComponent implements OnInit {
         title: response.message,
         showCloseButton: true,
       });
+      this.isLoading$.next(false);
+
     }
+    this.isLoading$.next(false);
   }
+
 }
