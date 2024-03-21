@@ -195,14 +195,17 @@ statusCellRenderer(params: any) {
     const editButton = `
     <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-action="edit" data-id="${param.data.programId}">
       <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
+      Approve
     </button>`;
 
     const deleteButton = `
     <button class="btn btn-icon btn-active-light-primary w-30px h-30px" data-action="delete" data-id="${param.data.programId}">
-      <i class="ki-duotone ki-trash fs-3">
+      <i class="ki-duotone ki-eye fs-3">
         <span class="path1"></span><span class="path2"></span>
         <span class="path3"></span><span class="path4"></span><span class="path5"></span>
+        Review negotiation
       </i>
+
     </button>`;
 
     const buttons = [editButton, deleteButton].join('');
