@@ -19,6 +19,7 @@ import { CygleraService } from './services/cygleraservice.service';
 import { RequestForApprovalService } from './services/rfa.service';
 import { ProgramService } from './services/program.service';
 import { ApprovalService } from './services/approval.service';
+import { CurrencyPipe } from '@angular/common';
 
 
 
@@ -47,6 +48,7 @@ import { ApprovalService } from './services/approval.service';
     RequestForApprovalService,
     ProgramService,
     ApprovalService,
+    CurrencyPipe,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 
   ],

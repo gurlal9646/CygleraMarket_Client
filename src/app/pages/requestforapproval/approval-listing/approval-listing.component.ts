@@ -2,15 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import moment from 'moment';
 import { Subscription } from 'rxjs';
 import { ThemeModeService } from 'src/app/_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ApprovalService } from 'src/app/services/approval.service';
-import { EntityType } from 'src/app/models/Enums';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-approval-listing',
   templateUrl: './approval-listing.component.html',
-  styleUrl: './approval-listing.component.scss'
+  styleUrl: './approval-listing.component.scss',
 })
 export class ApprovalListingComponent implements OnInit {
   columnDefsUsers: any;
@@ -25,27 +24,27 @@ export class ApprovalListingComponent implements OnInit {
   public rowModelType: string;
   overlayLoadingTemplate: string;
   searchvalue: any;
-  programList: any = [];
+  requestList: any = [];
   private unsubscribe: Subscription[] = [];
-  static that:any;
+  static that: any;
 
   constructor(
     private approvalService: ApprovalService,
     private modeService: ThemeModeService,
-    private router:Router
+    private router: Router,
+    private currencyPipe: CurrencyPipe
   ) {
     ApprovalListingComponent.that = this;
-
   }
 
   ngOnInit(): void {
     const subscr = this.modeService.mode.asObservable().subscribe((mode) => {
-      const productListElement = document.getElementById('productList');
+      const requestListElement = document.getElementById('requestList');
 
       // Check if the element exists
-      if (productListElement) {
+      if (requestListElement) {
         // Change the class based on the mode
-        productListElement.className =
+        requestListElement.className =
           mode === 'dark' ? 'ag-theme-quartz-dark' : 'ag-theme-quartz';
       }
     });
@@ -82,7 +81,7 @@ export class ApprovalListingComponent implements OnInit {
         field: 'type',
         headerTooltip: Type,
         cellRenderer: this.TypeCellrender,
-        cellRendererParams: (params:any) => ({
+        cellRendererParams: (params: any) => ({
           type: params.data.type,
         }),
         autoHeight: true,
@@ -100,6 +99,14 @@ export class ApprovalListingComponent implements OnInit {
         width: 210,
         minWidth: 120,
         flex: 1,
+        valueFormatter: (params: any) => {
+          return this.currencyPipe.transform(
+            params.data.price,
+            'CAD',
+            'symbol',
+            '1.2-2'
+          );
+        },
       },
       {
         headerName: Status,
@@ -118,12 +125,12 @@ export class ApprovalListingComponent implements OnInit {
         field: 'createdAt',
         headerTooltip: CreatedDate,
         cellRenderer: this.DateCellrender,
-        cellRendererParams: (params:any) => ({
+        cellRendererParams: (params: any) => ({
           date: params.data.createdAt,
         }),
         autoHeight: true,
         cellClass: ['cursor-pointer', 'agTooltip', 'clippingtext'],
-        width: 150,
+        width: 120,
         minWidth: 120,
         flex: 1,
       },
@@ -134,7 +141,7 @@ export class ApprovalListingComponent implements OnInit {
         headerTooltip: Action,
         autoHeight: true,
         cellClass: ['cursor-pointer', 'agTooltip', 'contextMenu'],
-        width: 120,
+        width: 150,
         minWidth: 120,
       },
     ];
@@ -144,7 +151,7 @@ export class ApprovalListingComponent implements OnInit {
     return '';
   }
 
-  DateCellrender(param: any ) {
+  DateCellrender(param: any) {
     if (param.date == null) {
       return 'Never Authenticated';
     }
@@ -152,118 +159,105 @@ export class ApprovalListingComponent implements OnInit {
   }
 
   // Inside your Angular component class
-statusCellRenderer(params: any) {
-  let badgeText = '';
-  let badgeColor = '';
+  statusCellRenderer(params: any) {
+    let badgeText = '';
+    let badgeColor = '';
 
-  switch (params.data.status) {
-    case 'pending':
-      badgeText = 'Pending';
-      badgeColor = 'badge-warning';
-      break;
-    case 'approved':
-      badgeText = 'Approved';
-      badgeColor = 'badge-success';
-      break;
-    case 'rejected':
-      badgeText = 'Rejected';
-      badgeColor = 'badge-danger';
-      break;
-    default:
-      badgeText = 'Unknown';
-      badgeColor = 'badge-secondary';
+    switch (params.data.status) {
+      case 'pending':
+        badgeText = 'Pending';
+        badgeColor = 'badge-warning';
+        break;
+      case 'approved':
+        badgeText = 'Approved';
+        badgeColor = 'badge-success';
+        break;
+      case 'rejected':
+        badgeText = 'Rejected';
+        badgeColor = 'badge-danger';
+        break;
+      default:
+        badgeText = 'Unknown';
+        badgeColor = 'badge-secondary';
+    }
+
+    return `<span class="badge ${badgeColor}">${badgeText}</span>`;
   }
 
-  return `<span class="badge ${badgeColor}">${badgeText}</span>`;
-}
-
-
-  TypeCellrender(param: any ) {
+  TypeCellrender(param: any) {
     if (param.type == 1) {
-      return 'Product'
-    }
-   else if (param.type == 2) {
+      return 'Product';
+    } else if (param.type == 2) {
       return 'Service';
-    }
-    else if (param.type == 3) {
-      return 'Program'
+    } else if (param.type == 3) {
+      return 'Program';
     }
     return 'Unknown';
   }
 
   editCellRender(param: any) {
-    const editButton = `
-    <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-action="edit" data-id="${param.data.programId}">
-      <i class="ki-duotone ki-pencil fs-3"><span class="path1"></span><span class="path2"></span></i>
-      Approve
-    </button>`;
+    const approveButton = `
+    <a class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-action="approve" data-id="${param.data._id}" title="Approve request">
+      <i class="ki-outline ki-shield-tick fs-3"><span class="path1"></span><span class="path2"></span></i>
+      
+    </a>`;
 
-    const deleteButton = `
-    <button class="btn btn-icon btn-active-light-primary w-30px h-30px" data-action="delete" data-id="${param.data.programId}">
-      <i class="ki-duotone ki-eye fs-3">
-        <span class="path1"></span><span class="path2"></span>
-        <span class="path3"></span><span class="path4"></span><span class="path5"></span>
-        Review negotiation
-      </i>
+    const rejectButton = `
+    <a class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-action="reject" data-id="${param.data._id}" title="Reject request">
+      <i class="ki-outline ki-shield-cross fs-3"><span class="path1"></span><span class="path2"></span></i>
+      
+    </a>`;
 
-    </button>`;
+    const viewButton = `
+    <a class="btn btn-icon btn-active-light-primary w-30px h-30px me-3" data-action="view" data-id="${param.data._id}" title="Review negotiation">
+      <i class="ki-outline ki-eye fs-3"><span class="path1"></span><span class="path2"></span></i>
+      
+    </a>`;
 
-    const buttons = [editButton, deleteButton].join('');
+    const buttons = [approveButton, rejectButton,viewButton].join('');
 
     // Create a div element to wrap buttons
     const div = document.createElement('div');
     div.innerHTML = buttons;
 
     // Add event listeners to the buttons
-    const editBtn: any = div.querySelector('[data-action="edit"]');
-    const deleteBtn: any = div.querySelector('[data-action="delete"]');
+    const approveBtn: any = div.querySelector('[data-action="approve"]');
+    const rejectBtn: any = div.querySelector('[data-action="reject"]');
+    const viewBtn: any = div.querySelector('[data-action="view"]');
 
-    editBtn.addEventListener('click', () => {
+
+    approveBtn.addEventListener('click', () => {
       // Handle edit button click
-      ApprovalListingComponent.that.router.navigate([`/programs/editprogram/${param.data.programId}`]);
+      ApprovalListingComponent.that.router.navigate([
+        `/programs/editprogram/${param.data._id}`,
+      ]);
     });
 
-    deleteBtn.addEventListener('click', () => {
+    rejectBtn.addEventListener('click', () => {console.log('Reject clicked')});
 
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'You will not be able to recover this record!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!',
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          const response = await ApprovalListingComponent.that.productService.deleteProgram(param.data.programId);
-          if (response.code == 1) {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: response.message,
-              showConfirmButton:false,
-              timer:5000
-            });
-            ApprovalListingComponent.that.ngOnInit();
-          }
-        }
-      });
-    });
+    viewBtn.addEventListener('click', () => {console.log('View clicked')});
+
 
     // Return the HTML content with attached event listeners
     return div;
   }
 
-
-
   async GetApprovals() {
     const response = await this.approvalService.getApprovals();
     if (response.code == 1) {
-      this.programList = response.data;
+      this.requestList = response.data;
       if (this.gridApiMembers) {
-        this.gridApiMembers.setGridOption('rowData', this.programList);
+        this.gridApiMembers.setGridOption('rowData', this.requestList);
       }
     }
+  }
+
+  calculateDays(sDate: any, eDate: any) {
+    const startDate = new Date(sDate);
+    const endDate = new Date(eDate);
+    const timeDifference = endDate.getTime() - startDate.getTime();
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    return daysDifference;
   }
 
   onGridReadyMember(params: { api: any; columnApi: any }) {
@@ -278,7 +272,7 @@ statusCellRenderer(params: any) {
 
   quicksearch() {
     if (this.gridApiMembers) {
-      this.gridApiMembers.setGridOption('rowData', this.programList);
+      this.gridApiMembers.setGridOption('rowData', this.requestList);
     }
     this.gridApiMembers.setQuickFilter(this.searchvalue);
     if (

@@ -5,6 +5,7 @@ import { ThemeModeService } from 'src/app/_metronic/partials/layout/theme-mode-s
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ProgramService } from 'src/app/services/program.service';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-program-listing',
@@ -31,7 +32,8 @@ export class ProgramListingComponent implements OnInit {
   constructor(
     private programService: ProgramService,
     private modeService: ThemeModeService,
-    private router:Router
+    private router:Router,
+    private currencyPipe:CurrencyPipe
   ) {
     ProgramListingComponent.that = this;
 
@@ -97,6 +99,9 @@ export class ProgramListingComponent implements OnInit {
         width: 210,
         minWidth: 120,
         flex: 1,
+        valueFormatter: (params:any) => {
+          return this.currencyPipe.transform(params.data.price, 'CAD', 'symbol', '1.2-2');
+        }
       },
       {
         headerName: Description,

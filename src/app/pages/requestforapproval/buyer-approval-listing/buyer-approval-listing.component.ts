@@ -1,6 +1,3 @@
-
-
-
 import {
   AfterViewInit,
   Component,
@@ -23,9 +20,11 @@ import { ApprovalService } from 'src/app/services/approval.service';
 @Component({
   selector: 'app-buyer-approval-listing',
   templateUrl: './buyer-approval-listing.component.html',
-  styleUrl: './buyer-approval-listing.component.scss'
+  styleUrl: './buyer-approval-listing.component.scss',
 })
-export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BuyerApprovalListingComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   approvalList: any = [];
   isLoading = false;
   quantity: number = 0;
@@ -48,7 +47,7 @@ export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnD
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
     private rfaService: RequestForApprovalService,
-    private router:Router
+    private router: Router
   ) {}
 
   ngAfterViewInit(): void {
@@ -58,7 +57,7 @@ export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnD
     this.clickListener = this.renderer.listen(document, 'click', (event) => {
       const closestBtn = event.target.closest('.btn');
       if (closestBtn) {
-        const { action,productid,sellerid,price } = closestBtn.dataset;
+        const { action, productid, sellerid, price } = closestBtn.dataset;
         switch (action) {
           case 'addQuantity':
             this.productId = productid;
@@ -75,9 +74,6 @@ export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnD
     });
   }
 
-
-
-
   async ngOnInit() {
     await this.GetProducts();
   }
@@ -86,8 +82,21 @@ export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnD
     const response = await this.approvalService.getApprovals();
     if (response.code == 1) {
       this.approvalList = response.data;
+      for (let i of this.approvalList) {
+        if (i.type === 2) {
+          i.duration = this.calculateDays(i.startDate, i.endDate);
+        }
+      }
       this.cdr.detectChanges();
     }
+  }
+
+  calculateDays(sDate: any, eDate: any) {
+    const startDate = new Date(sDate);
+    const endDate = new Date(eDate);
+    const timeDifference = endDate.getTime() - startDate.getTime();
+    const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    return daysDifference;
   }
 
   async onSubmit(event: Event, myForm: NgForm) {
@@ -95,11 +104,11 @@ export class BuyerApprovalListingComponent implements OnInit, AfterViewInit, OnD
       return;
     }
     const request = {
-      type:EntityType.PROGRAM,
-      itemUniqueId:this.productId,
-      sellerUniqueId:this.sellerId,
+      type: EntityType.PROGRAM,
+      itemUniqueId: this.productId,
+      sellerUniqueId: this.sellerId,
       quantity: myForm.value['quantity'],
-      price: myForm.value['quantity'] * this.price
+      price: myForm.value['quantity'] * this.price,
     };
 
     const response = await this.rfaService.addRequest(request);

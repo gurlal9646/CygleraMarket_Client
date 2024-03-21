@@ -20,9 +20,28 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-1">
                     <!--begin::Users-->
-                    <div class="fw-bold text-gray-600 mb-5">Price: {{ approval.price | currency:'CAD':'symbol':'1.2-2' }} </div>
+                    @if (approval.type === 1 ) {
+                      <div class="fw-bold text-gray-600 mb-5">Quantity: {{ approval.quantity }}</div>
+                      <div class="fw-bold text-gray-600 mb-5">Unit Price: {{ approval.price/ approval.quantity | currency:'CAD':'symbol':'1.2-2' }} </div>
+                    }
+
+                    @if (approval.type === 2 ) {
+                      <div class="fw-bold text-gray-600 mb-5">Duration: {{ approval.duration }} day(s)</div>
+                      <div class="fw-bold text-gray-600 mb-5">Price per day: {{ approval.price/ approval.duration | currency:'CAD':'symbol':'1.2-2' }} </div>
+
+                    }
+
+                    @if (approval.type === 3 ) {
+                      <div class="fw-bold text-gray-600 mb-5">Members: {{ approval.quantity }}</div>
+                      <div class="fw-bold text-gray-600 mb-5">Unit Price: {{ approval.price/ approval.quantity | currency:'CAD':'symbol':'1.2-2' }} </div>
+                    }
+                  
+
+                    <div class="fw-bold text-gray-600 mb-5">Total Price: {{ approval.price | currency:'CAD':'symbol':'1.2-2' }} </div>
                     <div class="fw-bold text-gray-600 mb-5">Created Date: {{ approval.createdAt | date:'yyyy-MM-dd'  }}</div>
                     <div class="fw-bold text-gray-600 mb-5">Status: {{ approval.status | titlecase }}</div>
+                  
+                   
 
 
                     <!--end::Users-->
@@ -30,7 +49,9 @@
                 <!--end::Card body-->
                 <!--begin::Card footer-->
                 <div class="card-footer flex-wrap pt-0">
-                    <button type="button" class="btn btn-primary" [attr.data-productid]="approval.programId"  data-action="addQuantity">View Item Details</button>
+                    <button type="button" class="btn btn-primary" [attr.data-productid]="approval.programId"  data-action="addQuantity">View Item</button>
+                    <button type="button" class="btn btn-primary ml-5" [attr.data-productid]="approval.programId"  data-action="addQuantity">Review Negotiation</button>
+
                 </div>
                 <!--end::Card footer-->
             </div>

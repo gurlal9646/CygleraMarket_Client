@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { ThemeModeService } from 'src/app/_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-products',
@@ -31,7 +33,8 @@ export class ProductListingComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private modeService: ThemeModeService,
-    private router:Router
+    private router:Router,
+    private currencyPipe: CurrencyPipe
   ) {
     ProductListingComponent.that = this;
 
@@ -95,6 +98,9 @@ export class ProductListingComponent implements OnInit {
         width: 210,
         minWidth: 120,
         flex: 1,
+        valueFormatter: (params:any) => {
+          return this.currencyPipe.transform(params.data.price, 'CAD', 'symbol', '1.2-2');
+        }
       },
       {
         headerName: Category,

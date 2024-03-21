@@ -17,20 +17,27 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   language: LanguageFlag;
   langs = languages;
   private unsubscribe: Subscription[] = [];
-  user:UserModel;
-  userType:string = localStorage.getItem("roleId")?.toString() === '1'? "Seller" : "Buyer";
+  user: UserModel;
+  userType: string = '';
 
   constructor(
-    private router:Router,
+    private router: Router,
     private translationService: TranslationService,
-    private authService:AuthService
+    private authService: AuthService
   ) {
-      this.user = this.authService.getcurrentUserValue();
+    this.user = this.authService.getcurrentUserValue();
+    if (this.user.roleId == 1) {
+      this.userType = 'Buyer';
+    } else if (this.user.roleId == 2) {
+      this.userType = 'Seller';
+    }
+    else if (this.user.roleId == 10) {
+      this.userType = 'Admin';
+    }
   }
 
   ngOnInit(): void {
     this.setLanguage(this.translationService.getSelectedLanguage());
-
   }
 
   logout() {
