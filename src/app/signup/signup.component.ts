@@ -259,13 +259,7 @@ export class SignupComponent implements OnInit, OnDestroy {
       response = await this.buyerService.register(this.registrationForm.value);
     }
     if (response.code == 1) {
-      this.user = {
-        token: response.data.token,
-        roleId: response.data.roleId,
-        firstName: response.data.firstName,
-        lastName: response.data.lastName,
-        email: response.data.email,
-      };
+      this.user = response.data;
       this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);
     } else {

@@ -61,7 +61,6 @@ export class ProgramListingBuyerComponent implements OnInit, AfterViewInit, OnDe
             this.productId = productid;
             this.sellerId = sellerid;
             this.price = price;
-            console.log(this.productId);
             this.modalService.open(this.formModal, this.modalConfig);
             break;
 

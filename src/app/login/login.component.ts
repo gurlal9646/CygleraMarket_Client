@@ -17,7 +17,7 @@ export type UserType = UserModel | undefined;
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   returnUrl: string;
-  user: UserType;
+  user: UserModel;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
@@ -76,30 +76,23 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async submit() {
     this.isLoading$.next(true);
-    const loginResponse = await this._loginService.generateToken(
+    const response = await this._loginService.generateToken(
       this.loginForm.value
     );
-    if (loginResponse.code == 1) {
-      this.user = {
-        token: loginResponse.data.token,
-        roleId: loginResponse.data.roleId,
-        firstName: loginResponse.data.firstName,
-        lastName: loginResponse.data.lastName,
-        email: loginResponse.data.email,
-      };
+    if (response.code == 1) {
+      this.user = response.data;
       this.authService.setcurrentUserValue(this.user);
       this.router.navigate(['/dashboard']);
-    } else if (loginResponse.subcode == 2) {
+    } else if (response.subcode == 2) {
       this.showLoginOptions();
     } else {
       Swal.fire({
         position: 'center',
         icon: 'info',
-        title: loginResponse.message,
+        title: response.message,
         showCloseButton: true,
       });
       this.isLoading$.next(false);
-
     }
 
     this.isLoading$.next(false);
