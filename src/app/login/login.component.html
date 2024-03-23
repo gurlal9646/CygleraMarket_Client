@@ -19,8 +19,8 @@
 
 <!--begin::Form group-->
 <div class="fv-row mb-8">
-  <label class="form-label fs-6 fw-bolder text-gray-900">Email</label>
-  <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off"
+  <label class="form-label fs-6 fw-bolder text-gray-900" for="email">Email</label>
+  <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off" placeholder="Email"
   [ngClass]="{
     'is-invalid':
     loginForm.controls['email'].invalid &&
@@ -54,10 +54,10 @@
 <!--begin::Form group-->
 <div class="fv-row mb-3">
 
-  <label class="form-label fw-bolder text-gray-900 fs-6 mb-0">Password</label>
+  <label class="form-label fw-bolder text-gray-900 fs-6 mb-0" for="password">Password</label>
 
   <input class="form-control bg-transparent" type="password" name="password" autocomplete="off"
-    formControlName="password"  [ngClass]="{
+    formControlName="password" placeholder="Password"  [ngClass]="{
       'is-invalid':
       loginForm.controls['password'].invalid &&
         (loginForm.controls['password'].touched ||

@@ -12,9 +12,9 @@ export class ListsWidget26Component implements OnInit {
 
   ngOnInit(): void {
     this.rows = [
-      { description: 'Avg. Client Rating' },
-      { description: 'Instagram Followers' },
-      { description: 'Google Ads CPC' },
+      { description: 'Cyglera Health Marketplace Assistance' },
+      { description: 'Cyglera Health Marketplace Social Media Following' },
+      { description: 'Cyglera Health Marketplace Advertising Cost-Per-Click (CPC)' }
     ];
   }
 }

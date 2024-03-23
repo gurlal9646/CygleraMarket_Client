@@ -1,118 +1,329 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
-    <ng-container *ngFor="let approval of approvalList">
-        <!--begin::Col-->
-        <div class="col-md-4">
-            <!--begin::Card-->
-            <div class="card card-flush h-md-100">
-                <!--begin::Card header-->
-                <div class="card-header">
-                    <!--begin::Card title-->
-                    <div class="card-title">
-                      <h2>
-                        <span class="badge 
-                          badge-{{ approval.type === 1 ? 'primary' : approval.type === 2 ? 'success' : 'danger' }}">
-                          {{ approval.type === 1 ? 'Product' : approval.type === 2 ? 'Service' : 'Program' }}
-                        </span>
-                      </h2>                </div>
-                    <!--end::Card title-->
-                </div>
-                <!--end::Card header-->
-                <!--begin::Card body-->
-                <div class="card-body pt-1">
-                    <!--begin::Users-->
-                    @if (approval.type === 1 ) {
-                      <div class="fw-bold text-gray-600 mb-5">Quantity: {{ approval.quantity }}</div>
-                      <div class="fw-bold text-gray-600 mb-5">Unit Price: {{ approval.price/ approval.quantity | currency:'CAD':'symbol':'1.2-2' }} </div>
-                    }
-
-                    @if (approval.type === 2 ) {
-                      <div class="fw-bold text-gray-600 mb-5">Duration: {{ approval.duration }} day(s)</div>
-                      <div class="fw-bold text-gray-600 mb-5">Price per day: {{ approval.price/ approval.duration | currency:'CAD':'symbol':'1.2-2' }} </div>
-
-                    }
-
-                    @if (approval.type === 3 ) {
-                      <div class="fw-bold text-gray-600 mb-5">Members: {{ approval.quantity }}</div>
-                      <div class="fw-bold text-gray-600 mb-5">Unit Price: {{ approval.price/ approval.quantity | currency:'CAD':'symbol':'1.2-2' }} </div>
-                    }
-                  
-
-                    <div class="fw-bold text-gray-600 mb-5">Total Price: {{ approval.price | currency:'CAD':'symbol':'1.2-2' }} </div>
-                    <div class="fw-bold text-gray-600 mb-5">Created Date: {{ approval.createdAt | date:'yyyy-MM-dd'  }}</div>
-                    <div class="fw-bold text-gray-600 mb-5">Status: {{ approval.status | titlecase }}</div>
-                  
-                   
-
-
-                    <!--end::Users-->
-                </div>
-                <!--end::Card body-->
-                <!--begin::Card footer-->
-                <div class="card-footer flex-wrap pt-0">
-                    <button type="button" class="btn btn-primary" style="margin-right: 5px;" [attr.data-productid]="approval.programId"  data-action="addQuantity">View Item</button>
-                    <button type="button" class="btn btn-primary" [attr.data-productid]="approval.programId"  data-action="addQuantity">Review Negotiation</button>
-
-                </div>
-                <!--end::Card footer-->
-            </div>
-            <!--end::Card-->
+  <ng-container *ngFor="let approval of approvalList">
+    <!--begin::Col-->
+    <div class="col-md-4">
+      <!--begin::Card-->
+      <div class="card card-flush h-md-100">
+        <!--begin::Card header-->
+        <div class="card-header">
+          <!--begin::Card title-->
+          <div class="card-title">
+            <h2>
+              <span
+                class="badge 
+                          badge-{{
+                  approval.type === 1
+                    ? 'primary'
+                    : approval.type === 2
+                    ? 'success'
+                    : 'danger'
+                }}"
+              >
+                {{
+                  approval.type === 1
+                    ? "Product"
+                    : approval.type === 2
+                    ? "Service"
+                    : "Program"
+                }}
+              </span>
+            </h2>
+          </div>
+          <!--end::Card title-->
         </div>
-        <!--end::Col-->
-    </ng-container>
+        <!--end::Card header-->
+        <!--begin::Card body-->
+        <div class="card-body pt-1">
+          <!--begin::Users-->
+          @if (approval.type === 1 ) {
+          <div class="fw-bold text-gray-600 mb-5">
+            Quantity: {{ approval.quantity }}
+          </div>
+          <div class="fw-bold text-gray-600 mb-5">
+            Unit Price:
+            {{
+              approval.price / approval.quantity
+                | currency : "CAD" : "symbol" : "1.2-2"
+            }}
+          </div>
+          } @if (approval.type === 2 ) {
+          <div class="fw-bold text-gray-600 mb-5">
+            Duration: {{ approval.duration }} day(s)
+          </div>
+          <div class="fw-bold text-gray-600 mb-5">
+            Price per day:
+            {{
+              approval.price / approval.duration
+                | currency : "CAD" : "symbol" : "1.2-2"
+            }}
+          </div>
 
+          } @if (approval.type === 3 ) {
+          <div class="fw-bold text-gray-600 mb-5">
+            Members: {{ approval.quantity }}
+          </div>
+          <div class="fw-bold text-gray-600 mb-5">
+            Unit Price:
+            {{
+              approval.price / approval.quantity
+                | currency : "CAD" : "symbol" : "1.2-2"
+            }}
+          </div>
+          }
+
+          <div class="fw-bold text-gray-600 mb-5">
+            Total Price:
+            {{ approval.price | currency : "CAD" : "symbol" : "1.2-2" }}
+          </div>
+          <div class="fw-bold text-gray-600 mb-5">
+            Created Date: {{ approval.createdAt | date : "yyyy-MM-dd" }}
+          </div>
+          <div class="fw-bold text-gray-600 mb-5">
+            Status: {{ approval.status | titlecase }}
+          </div>
+
+          <!--end::Users-->
+        </div>
+        <!--end::Card body-->
+        <!--begin::Card footer-->
+        <div class="card-footer flex-wrap pt-0">
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="margin-right: 5px"
+            [attr.data-productid]="approval.programId"
+            data-action="addQuantity"
+          >
+            View Item
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="reviewNegotiation(approval.requestId)"
+          >
+            Review Negotiation
+          </button>
+        </div>
+        <!--end::Card footer-->
+      </div>
+      <!--end::Card-->
+    </div>
+    <!--end::Col-->
+  </ng-container>
 </div>
 
-
-
 <ng-template #formModal let-modal>
-<form #myForm="ngForm" (ngSubmit)="onSubmit($event, myForm)">
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Program Member Count</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <div class="d-flex flex-column scroll-y me-n7 pe-7 mw-650px" id="kt_modal_update_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_update_customer_header" data-kt-scroll-wrappers="#kt_modal_update_customer_scroll"
-      data-kt-scroll-offset="300px">
-      <!--begin::User toggle-->
-      <div class="fw-bold fs-3 rotate collapsible mb-7" data-bs-toggle="collapse" role="button" (click)="collapse1.toggle()" [attr.aria-expanded]="!isCollapsed1" aria-controls="kt_modal_update_customer_user_info">Program Member Count
-        <span class="ms-2 rotate-180">
-          <i class="ki-duotone ki-down fs-3" [ngClass]="{ 'ki-up': !isCollapsed1 }"></i>
-        </span>
-      </div>
-      <!--end::User toggle-->
-      <!--begin::User form-->
-      <div class="collapse show" #collapse1="ngbCollapse" [(ngbCollapse)]="isCollapsed1">
-        <!--begin::Input group-->
-        <div class="fv-row mb-7">
-          <!--begin::Label-->
-          <label class="required fw-semibold fs-6 mb-2">Enter Member Count</label>
-          <!--end::Label-->
-          <!--begin::Input-->
-          <input type="number" class="form-control form-control-solid" name="quantity" [(ngModel)]="quantity" #name="ngModel" required />
-          <!--end::Input-->
+  <form #myForm="ngForm" (ngSubmit)="onSubmit($event, myForm)">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Program Member Count</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div
+        class="d-flex flex-column scroll-y me-n7 pe-7 mw-650px"
+        id="kt_modal_update_customer_scroll"
+        data-kt-scroll="true"
+        data-kt-scroll-activate="{default: false, lg: true}"
+        data-kt-scroll-max-height="auto"
+        data-kt-scroll-dependencies="#kt_modal_update_customer_header"
+        data-kt-scroll-wrappers="#kt_modal_update_customer_scroll"
+        data-kt-scroll-offset="300px"
+      >
+        <!--begin::User toggle-->
+        <div
+          class="fw-bold fs-3 rotate collapsible mb-7"
+          data-bs-toggle="collapse"
+          role="button"
+          (click)="collapse1.toggle()"
+          [attr.aria-expanded]="!isCollapsed1"
+          aria-controls="kt_modal_update_customer_user_info"
+        >
+          Program Member Count
+          <span class="ms-2 rotate-180">
+            <i
+              class="ki-duotone ki-down fs-3"
+              [ngClass]="{ 'ki-up': !isCollapsed1 }"
+            ></i>
+          </span>
         </div>
-        <!--end::Input group-->
+        <!--end::User toggle-->
+        <!--begin::User form-->
+        <div
+          class="collapse show"
+          #collapse1="ngbCollapse"
+          [(ngbCollapse)]="isCollapsed1"
+        >
+          <!--begin::Input group-->
+          <div class="fv-row mb-7">
+            <!--begin::Label-->
+            <label class="required fw-semibold fs-6 mb-2"
+              >Enter Member Count</label
+            >
+            <!--end::Label-->
+            <!--begin::Input-->
+            <input
+              type="number"
+              class="form-control form-control-solid"
+              name="quantity"
+              [(ngModel)]="quantity"
+              #name="ngModel"
+              required
+            />
+            <!--end::Input-->
+          </div>
+          <!--end::Input group-->
+        </div>
+        <!--end::User form-->
       </div>
-      <!--end::User form-->
+    </div>
+    <div class="modal-footer flex-center">
+      <!--begin::Button-->
+      <button
+        type="reset"
+        id="kt_modal_update_customer_cancel"
+        class="btn btn-light me-3"
+        (click)="modal.dismiss('cancel')"
+      >
+        Discard
+      </button>
+      <!--end::Button-->
+
+      <!--begin::Button-->
+      <button
+        type="submit"
+        id="kt_modal_update_customer_submit"
+        class="btn btn-primary"
+        [attr.data-kt-indicator]="isLoading ? 'on' : 'off'"
+      >
+        <span class="indicator-label"> Submit </span>
+        <span class="indicator-progress">
+          Please wait...
+          <span
+            class="spinner-border spinner-border-sm align-middle ms-2"
+          ></span>
+        </span>
+      </button>
+      <!--end::Button-->
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #negotiationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Negotiation Conversation</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div
+    class="scroll-y me-n5 pe-5"
+    [ngClass]="!isDrawer ? 'h-300px h-lg-auto' : ''"
+    data-kt-element="messages"
+    data-kt-scroll="true"
+    data-kt-scroll-activate="{default: false, lg: true}"
+    data-kt-scroll-max-height="auto"
+    [attr.data-kt-scroll-dependencies]="
+      isDrawer
+        ? '#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer'
+        : '#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer'
+    "
+    [attr.data-kt-scroll-wrappers]="
+      isDrawer
+        ? '#kt_drawer_chat_messenger_body'
+        : '#kt_content, #kt_chat_messenger_body'
+    "
+    [attr.data-kt-scroll-offset]="isDrawer ? '0px' : '-2px'"
+  >
+    <ng-container *ngFor="let message of conversationList">
+      <div
+        [ngClass]="{
+          'd-flex': !isDrawer,
+          'justify-content-start': message.sellerId === '',
+          'justify-content-end': message.sellerId !== ''
+        }"
+        [attr.data-kt-element]="'template-' + message.sellerId"
+        class="mb-10"
+      >
+        <div
+          class="d-flex flex-column align-items"
+          [ngClass]="
+            'align-items-' + (message.sellerId !== '' ? 'start' : 'end')
+          "
+        >
+          <div class="d-flex align-items-center mb-2">
+            <ng-container *ngIf="message.sellerId === ''">
+              <div div class="symbol symbol-35px symbol-circle">
+                <img alt="Pic" />
+              </div>
+              <div class="ms-3">
+                <a
+                  href="#"
+                  class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1"
+                >
+                  Buyer
+                </a>
+                <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="message.sellerId !== ''">
+              <div class="me-3">
+                <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
+                <a
+                  href="#"
+                  class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1"
+                >
+                  Seller
+                </a>
+              </div>
+              <div class="symbol symbol-35px symbol-circle"></div>
+            </ng-container>
+          </div>
+
+          <div
+            [ngClass]="getMessageCssClass(message)"
+            data-kt-element="message-text"
+            [innerHTML]="message.message"
+          ></div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div
+    class="card-footer pt-4"
+    style="margin: 5px"
+    [id]="
+      isDrawer ? 'kt_drawer_chat_messenger_footer' : 'kt_chat_messenger_footer'
+    "
+  >
+    <textarea
+      name="newMessage"
+      [(ngModel)]="newMessage"
+      #name="ngModel"
+      class="form-control form-control-flush mb-3"
+      rows="1"
+      data-kt-element="input"
+      placeholder="Type a message"
+    ></textarea>
+
+    <div class="d-flex flex-stack">
+      <div class="d-flex align-items-center me-2"></div>
+      <button
+        class="btn btn-primary"
+        type="button"
+        data-kt-element="send"
+        (click)="sendMessage()"
+      >
+        Send
+      </button>
     </div>
   </div>
-  <div class="modal-footer flex-center">
-    <!--begin::Button-->
-    <button type="reset" id="kt_modal_update_customer_cancel" class="btn btn-light me-3" (click)="modal.dismiss('cancel')">
-      Discard
-    </button>
-    <!--end::Button-->
-
-    <!--begin::Button-->
-    <button type="submit" id="kt_modal_update_customer_submit" class="btn btn-primary" [attr.data-kt-indicator]="isLoading ? 'on' : 'off'">
-      <span class="indicator-label">
-        Submit
-      </span>
-      <span class="indicator-progress">
-        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-      </span>
-    </button>
-    <!--end::Button-->
-  </div>
-</form>
 </ng-template>

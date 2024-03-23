@@ -16,6 +16,9 @@ import Swal from 'sweetalert2';
 import { EntityType } from 'src/app/models/Enums';
 import { ProgramService } from 'src/app/services/program.service';
 import { ApprovalService } from 'src/app/services/approval.service';
+import moment from 'moment';
+import { UserModel } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-buyer-approval-listing',
@@ -29,9 +32,12 @@ export class BuyerApprovalListingComponent
   isLoading = false;
   quantity: number = 0;
   isCollapsed1 = false;
+  isDrawer: false;
 
   @ViewChild('formModal')
   formModal: TemplateRef<any>;
+  @ViewChild('negotiationModal')
+  negotiationModal: TemplateRef<any>;
 
   modalConfig: NgbModalOptions = {
     modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
@@ -40,6 +46,10 @@ export class BuyerApprovalListingComponent
   productId: any;
   sellerId: any;
   price: any;
+  conversationList: any = [];
+  newMessage: string = '';
+  user: UserModel;
+  requestId: string = '';
 
   constructor(
     private approvalService: ApprovalService,
@@ -47,8 +57,11 @@ export class BuyerApprovalListingComponent
     private renderer: Renderer2,
     private cdr: ChangeDetectorRef,
     private rfaService: RequestForApprovalService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getcurrentUserValue();
+  }
 
   ngAfterViewInit(): void {
     if (this.clickListener) {
@@ -63,7 +76,6 @@ export class BuyerApprovalListingComponent
             this.productId = productid;
             this.sellerId = sellerid;
             this.price = price;
-            console.log(this.productId);
             this.modalService.open(this.formModal, this.modalConfig);
             break;
 
@@ -136,5 +148,49 @@ export class BuyerApprovalListingComponent
       this.clickListener();
     }
     this.modalService.dismissAll();
+  }
+
+  async reviewNegotiation(requestId: any) {
+    this.modalService.open(this.negotiationModal, this.modalConfig);
+    this.requestId = requestId;
+    this.getConversation(requestId);
+  }
+
+  async sendMessage() {
+    const request = {
+      requestId: this.requestId,
+      message: this.newMessage,
+      buyerId: this.user.uniqueId,
+    };
+    const response = await this.rfaService.addConversation(request);
+    if (response.code == 1) {
+      this.newMessage = '';
+      await this.getConversation(this.requestId);
+    } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: response.message,
+        timer: 5000,
+      });
+    }
+  }
+
+  getMessageCssClass(message: any): string {
+    return `p-5 rounded text-gray-900 fw-bold mw-lg-400px bg-light-${
+      message.sellerId !== '' ? 'info' : 'primary'
+    } text-${message.sellerId !== '' ? 'start' : 'end'}`;
+  }
+
+  async getConversation(requestId: any) {
+    const response = await this.rfaService.getConversation(requestId);
+    if (response.code == 1) {
+      this.conversationList = response.data;
+      for (let message of this.conversationList) {
+        message.time = moment(message.createdAt).fromNow();
+      }
+    } else {
+      this.conversationList = [];
+    }
   }
 }
