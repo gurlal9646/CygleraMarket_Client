@@ -6,24 +6,18 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  defaultMessages,
-  defaultUserInfos,
-  messageFromClient,
-  MessageModel,
-  UserInfoModel,
-} from './dataExample';
 import { RequestForApprovalService } from 'src/app/services/rfa.service';
 import moment from 'moment';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserModel } from 'src/app/models/user.model';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-chat-inner',
-  templateUrl: './chat-inner.component.html',
+  selector: 'app-negotiation-conversation',
+  templateUrl: './negotiation-conversation.component.html',
+  styleUrl: './negotiation-conversation.component.scss'
 })
-export class ChatInnerComponent implements OnInit {
+export class NegotiationConversationComponent implements OnInit {
   @Input() isDrawer: boolean = false;
   @Input() requestId:string= '';
   @HostBinding('class') class = 'card-body';
@@ -32,46 +26,42 @@ export class ChatInnerComponent implements OnInit {
     : 'kt_chat_messenger_body';
   @ViewChild('messageInput', { static: true })
   messageInput: ElementRef<HTMLTextAreaElement>;
-
-  private messages$: BehaviorSubject<Array<MessageModel>> = new BehaviorSubject<
-    Array<MessageModel>
-  >(defaultMessages);
   messagesObs: any;
   user:UserModel;
+  isTextareaEmpty:boolean = true;
 
   constructor(private rfaService:RequestForApprovalService,private authService:AuthService) {
    this.user = this.authService.getcurrentUserValue();
 
   }
+  ngOnInit(): void {
+    this.getConversation(this.requestId); 
+  }
 
-  submitMessage(): void {
-    const text = this.messageInput.nativeElement.value;
-    const newMessage: MessageModel = {
-      user: 2,
-      type: 'out',
-      text,
-      time: 'Just now',
+  async submitMessage() {
+    const request = {
+      requestId: this.requestId,
+      message: this.messageInput.nativeElement.value,
+      buyerId: this.user.uniqueId,
     };
-    this.addMessage(newMessage);
-    // auto answer
-    setTimeout(() => {
-      this.addMessage(messageFromClient);
-    }, 4000);
-    // clear input
-    this.messageInput.nativeElement.value = '';
+    const response = await this.rfaService.addConversation(request);
+    if (response.code == 1) {
+      this.messageInput.nativeElement.value = '';
+            await this.getConversation(this.requestId);
+    } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: response.message,
+        timer: 5000,
+      });
+    }
   }
 
-  addMessage(newMessage: MessageModel): void {
-    const messages = [...this.messages$.value];
-    messages.push(newMessage);
-    this.messages$.next(messages);
-  }
+ 
 
-  getUser(user: number): UserInfoModel {
-    return defaultUserInfos[user];
-  }
 
-  getMessageCssClass(message: MessageModel): string {
+  getMessageCssClass(message: any): string {
     return `p-5 rounded text-gray-900 fw-bold mw-lg-400px bg-light-${
       message.type === 'in' ? 'info' : 'primary'
     } text-${message.type === 'in' ? 'start' : 'end'}`;
@@ -83,6 +73,7 @@ export class ChatInnerComponent implements OnInit {
     if (response.code == 1) {
       this.messagesObs = response.data;
       for(let message of this.messagesObs){
+        message.text = message.message;
         if(this.user.roleId === 1){
           message.type = 'in';
         }
@@ -97,7 +88,11 @@ export class ChatInnerComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    this.getConversation(this.requestId); 
+  checkInput() {
+    this.isTextareaEmpty = this.messageInput.nativeElement.value.trim() === '';
+    console.log(this.isTextareaEmpty);
   }
+
+
 }
+

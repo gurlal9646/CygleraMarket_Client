@@ -153,6 +153,7 @@ export class BuyerApprovalListingComponent
   async reviewNegotiation(requestId: any) {
     this.modalService.open(this.negotiationModal, this.modalConfig);
     this.requestId = requestId;
+    this.newMessage = '';
     this.getConversation(requestId);
   }
 

@@ -294,8 +294,8 @@ export class ApprovalListingComponent implements OnInit {
           ApprovalListingComponent.that.negotiationModal,
           ApprovalListingComponent.that.modalConfig
         );
+        ApprovalListingComponent.that.requestId = param.data.requestId;
       });
-      ApprovalListingComponent.that.getConversation(param.data.requestId);
     }
 
     // Return the HTML content with attached event listeners
@@ -380,42 +380,4 @@ export class ApprovalListingComponent implements OnInit {
     }
   }
 
-  async sendMessage() {
-    const request = {
-      requestId: this.requestId,
-      message: this.newMessage,
-      sellerId: this.user.uniqueId,
-    };
-    const response = await this.rfaService.addConversation(request);
-    if (response.code == 1) {
-      this.newMessage = '';
-      await this.getConversation(this.requestId);
-    } else {
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: response.message,
-        timer: 5000,
-      });
-    }
-  }
-
-  async getConversation(requestId: any) {
-    const response = await this.rfaService.getConversation(requestId);
-    if (response.code == 1) {
-      this.conversationList = response.data;
-      for(let message of this.conversationList){
-        message.time = moment(message.createdAt).fromNow();
-      }
-    }
-    else{
-      this.conversationList = [];
-    }
-  }
-
-  getMessageCssClass(message: any): string {
-    return `p-5 rounded text-gray-900 fw-bold mw-lg-400px bg-light-${
-      message.sellerId !== '' ? 'info' : 'primary'
-    } text-${message.sellerId !== '' ? 'start' : 'end'}`;
-  }
 }
