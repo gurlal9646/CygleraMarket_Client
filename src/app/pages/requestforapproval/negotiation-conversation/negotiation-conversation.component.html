@@ -17,77 +17,79 @@
   "
   [attr.data-kt-scroll-offset]="isDrawer ? '0px' : '-2px'"
 >
-  <ng-container *ngFor="let message of messagesObs">
-    <div
-      [ngClass]="{
+  @for (message of messagesObs; track message.conversationId) {
+  <div
+    [ngClass]="{
         'd-flex': !isDrawer,
         'd-none': message.template,
         'justify-content-start': message.type === 'in',
-        'justify-content-end': message.type !== 'in'
+        'justify-content-end': message.type !== 'in',
+        'm-5': !isDrawer,
       }"
-      [attr.data-kt-element]="'template-' + message.type"
-      class="mb-10"
+    [attr.data-kt-element]="'template-' + message.type"
+    class="mb-10"
+  >
+    <div
+      class="d-flex flex-column align-items"
+      [ngClass]="'align-items-' + (message.type === 'in' ? 'start' : 'end')"
     >
-      <div
-        class="d-flex flex-column align-items"
-        [ngClass]="'align-items-' + (message.type === 'in' ? 'start' : 'end')"
-      >
-        <div class="d-flex align-items-center mb-2">
-          <ng-container *ngIf="message.type === 'in'">
-            <div div class="symbol symbol-35px symbol-circle">
-              <img
-                alt="Pic"
-                src="../../../../assets/media/avatars/300-11.jpg"
-              />
-            </div>
-            <div class="ms-3">
-              <a
-                href="#"
-                class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1"
-              >
-                Gurlal
-              </a>
-              <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="message.type !== 'in'">
-            <div class="me-3">
-              <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
-              <a
-                href="#"
-                class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1"
-              >
-                You
-              </a>
-            </div>
-            <div class="symbol symbol-35px symbol-circle">
-              <img
-                alt="Pic"
-                src="../../../../assets/media/avatars/300-30.jpg"
-              />
-            </div>
-          </ng-container>
-        </div>
-
-        <div
-          [ngClass]="getMessageCssClass(message)"
-          data-kt-element="message-text"
-          [innerHTML]="message.text"
-        ></div>
+      <div class="d-flex align-items-center mb-2">
+        <ng-container *ngIf="message.type === 'in'">
+          <div div class="symbol symbol-35px symbol-circle">
+            <img alt="Pic" src="../../../../assets/media/avatars/blank.png" />
+          </div>
+          <div class="ms-3">
+            <a
+              href="#"
+              class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1"
+            >
+              @if(message.buyerId){ Buyer } @else { Seller }
+            </a>
+            <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="message.type !== 'in'">
+          <div class="me-3">
+            <span class="text-muted fs-7 mb-1">{{ message.time }}</span>
+            <a
+              href="#"
+              class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1"
+            >
+              You
+            </a>
+          </div>
+          <div class="symbol symbol-35px symbol-circle">
+            <img alt="Pic" src="../../../../assets/media/avatars/blank.png" />
+          </div>
+        </ng-container>
       </div>
+
+      <div
+        [ngClass]="getMessageCssClass(message)"
+        data-kt-element="message-text"
+        [innerHTML]="message.text"
+        style="word-wrap: break-word;"
+      ></div>
     </div>
-  </ng-container>
+  </div>
+  } @empty {
+  <div class="container">
+    <div class="text-center">
+      <p>No conversation available.</p>
+    </div>
+  </div>
+  }
 </div>
 
 <div
-  class="card-footer pt-4"
+  class="card-footer pt-4 m-5"
   [id]="
     isDrawer ? 'kt_drawer_chat_messenger_footer' : 'kt_chat_messenger_footer'
   "
 >
   <textarea
     #messageInput
-    class="form-control form-control-flush mb-3"
+    class="form-control form-control-flush mb-3 msgboxborder"
     rows="1"
     data-kt-element="input"
     placeholder="Type a message"
@@ -95,8 +97,7 @@
   ></textarea>
 
   <div class="d-flex flex-stack">
-    <div class="d-flex align-items-center me-2">
-    </div>
+    <div class="d-flex align-items-center me-2"></div>
     <button
       class="btn btn-primary"
       type="button"

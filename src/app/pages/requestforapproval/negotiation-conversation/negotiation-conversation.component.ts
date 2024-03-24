@@ -39,11 +39,22 @@ export class NegotiationConversationComponent implements OnInit {
   }
 
   async submitMessage() {
-    const request = {
-      requestId: this.requestId,
-      message: this.messageInput.nativeElement.value,
-      buyerId: this.user.uniqueId,
-    };
+   let request = {};
+    if(this.user.roleId === 1){
+     request = {
+        requestId: this.requestId,
+        message: this.messageInput.nativeElement.value,
+        buyerId: this.user.uniqueId,
+      };
+    }
+    else if(this.user.roleId === 2){
+      request = {
+         requestId: this.requestId,
+         message: this.messageInput.nativeElement.value,
+         sellerId: this.user.uniqueId,
+       };
+     }
+    
     const response = await this.rfaService.addConversation(request);
     if (response.code == 1) {
       this.messageInput.nativeElement.value = '';
@@ -75,10 +86,20 @@ export class NegotiationConversationComponent implements OnInit {
       for(let message of this.messagesObs){
         message.text = message.message;
         if(this.user.roleId === 1){
+          if(message.sellerId){
           message.type = 'in';
+          }
+          else{
+            message.type = 'out';
+          }
         }
-        else{
-          message.type = 'out';
+        else if(this.user.roleId === 2){
+          if(message.buyerId){
+          message.type = 'in';
+          }
+          else{
+            message.type = 'out';
+          }
         }
         message.time = moment(message.createdAt).fromNow();
       }
