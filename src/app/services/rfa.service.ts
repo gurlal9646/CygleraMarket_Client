@@ -37,7 +37,7 @@ export class RequestForApprovalService {
   }
 
   async updateRequestStatus(requestId:any,data: any): Promise<ApiResponse> {
-    const url = `${environment.apiUrl}/rfa/addRequest/${requestId}`;
+    const url = `${environment.apiUrl}/rfa/updateRequest/${requestId}`;
     try {
       const response = await firstValueFrom(this._http.put(url, data));
       return response as ApiResponse;
