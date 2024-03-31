@@ -75,6 +75,19 @@ export class RequestForApprovalService {
     }
   }
 
+  async getRequestCount(): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/rfa/getRequestCount`;
+    try {
+      const response = await firstValueFrom(this._http.get(url));
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
+
 
 
 

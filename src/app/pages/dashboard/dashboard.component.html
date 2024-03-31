@@ -11,8 +11,8 @@
   <!--end::Col-->
 
   <!--begin::Col-->
-  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10">
-    <app-cards-widget17 cssClass="h-md-50 mb-5 mb-xl-10"></app-cards-widget17>
+  <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10" *ngIf="apiCallsCompleted">
+    <app-cards-widget17 cssClass="h-md-50 mb-5 mb-xl-10" [total]="total" [approved]="approved" [pending]="pending" [rejected]="rejected"></app-cards-widget17>
     <app-lists-widget26 class="h-lg-50"></app-lists-widget26>
   </div>
   <!--end::Col-->
@@ -71,7 +71,7 @@
     </app-mixed-widget8>
   </div>
   <div class="col-xxl-8">
-    <app-tables-widget5 class="card card-xxl-stretch mb-5 mb-xxl-8"></app-tables-widget5>
+    <app-tables-widget5 [productList]="productList" class="card card-xxl-stretch mb-5 mb-xxl-8"></app-tables-widget5>
   </div>
 </div>
 

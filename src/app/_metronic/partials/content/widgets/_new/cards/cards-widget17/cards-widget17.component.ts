@@ -10,13 +10,15 @@ import Chart from 'chart.js/auto';
 })
 export class CardsWidget17Component implements OnInit {
   @Input() cssClass: string = '';
-  @Input() approved: number = 70;
-  @Input() rejected: number = 11;
-  @Input() pending?: number = 145;
+  @Input() total: number = 0;
+  @Input() approved: number = 0;
+  @Input() rejected: number = 0;
+  @Input() pending: number = 0;
 
   constructor() {}
 
   ngOnInit(): void {
+
     const ctx = document.getElementById('donutChart') as HTMLCanvasElement;
     new Chart(ctx, {
       type: 'doughnut',
