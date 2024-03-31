@@ -40,4 +40,19 @@ export class LoginService {
       return Promise.reject(res);
     }
   }
+
+  async resetPassword(userId:string, token:string, data: any): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/password-reset/${userId}/${token}`;
+    try {
+      const response = await firstValueFrom(
+        this._http.put(url, data)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
 }
