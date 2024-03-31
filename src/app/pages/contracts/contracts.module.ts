@@ -4,18 +4,23 @@ import { ContractListingComponent } from './contract-listing/contract-listing.co
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgGridModule } from 'ag-grid-angular';
+import { BuyerContractListingComponent } from './buyer-contract-listing/buyer-contract-listing.component';
 
 
 
 @NgModule({
-  declarations: [ContractListingComponent],
+  declarations: [BuyerContractListingComponent,ContractListingComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'buyer',
+        component: BuyerContractListingComponent
+    },
+    {
+        path: 'seller',
         component: ContractListingComponent
-      }
+    }
     ]),
     AgGridModule,
     FormsModule,

@@ -1,0 +1,71 @@
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
+    @for (contract of contractList; track contract.contractId) { 
+      <!--begin::Col-->
+      <div class="col-md-4">
+        <!--begin::Card-->
+        <div class="card card-flush h-md-100">
+          <!--begin::Card header-->
+          <div class="card-header">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2>
+                <span
+                  class="badge 
+                            badge-{{
+                    contract.type === 1
+                      ? 'primary'
+                      : contract.type === 2
+                      ? 'success'
+                      : 'danger'
+                  }}"
+                >
+                  {{
+                    contract.type === 1
+                      ? "Product"
+                      : contract.type === 2
+                      ? "Service"
+                      : "Program"
+                  }}
+                </span>
+              </h2>
+            </div>
+            <!--end::Card title-->
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body pt-1">
+            <!--begin::Users-->
+  
+            <div class="fw-bold text-gray-600 mb-5">
+              Price:
+              {{ contract.price | currency : "CAD" : "symbol" : "1.2-2" }}
+            </div>
+            <div class="fw-bold text-gray-600 mb-5">
+              Created Date: {{ contract.createdAt | date : "yyyy-MM-dd" }}
+            </div>
+            <div class="fw-bold text-gray-600 mb-5">
+              Status: {{ contract.status | titlecase }}
+            </div>
+  
+            <!--end::Users-->
+          </div>
+          <!--end::Card body-->
+          <!--begin::Card footer-->
+          <div class="card-footer flex-wrap pt-0">
+            <button
+              type="button"
+              class="btn btn-primary"
+             (click)="acceptContract(contract.contractId)"
+            >
+            
+              Accept Contract
+            </button>
+          </div>
+          <!--end::Card footer-->
+        </div>
+        <!--end::Card-->
+      </div>
+      <!--end::Col-->
+    }
+  </div>
+  

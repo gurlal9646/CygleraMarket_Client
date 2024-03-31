@@ -20,6 +20,7 @@ import { RequestForApprovalService } from './services/rfa.service';
 import { ProgramService } from './services/program.service';
 import { ApprovalService } from './services/approval.service';
 import { CurrencyPipe } from '@angular/common';
+import { ContractService } from './services/contract.service';
 
 
 
@@ -49,6 +50,7 @@ import { CurrencyPipe } from '@angular/common';
     ProgramService,
     ApprovalService,
     CurrencyPipe,
+    ContractService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
 
   ],

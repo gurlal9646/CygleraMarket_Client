@@ -54,7 +54,7 @@
 
        <!-- Contracts -->
        <div class="menu-item">
-        <a class="menu-link without-sub" routerLink="/contracts" routerLinkActive="active">
+        <a class="menu-link without-sub" [routerLink]="user.roleId === 1 ? '/contracts/buyer' : '/contracts/seller'" routerLinkActive="active">
           <span class="menu-icon">
             <app-keenicon name="document" class="fs-2"></app-keenicon>
           </span>

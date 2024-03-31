@@ -8,7 +8,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ProductService } from 'src/app/services/product.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeDetectorRef } from '@angular/core';
 import { RequestForApprovalService } from 'src/app/services/rfa.service';
@@ -35,7 +34,7 @@ export class ProgramListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
   };
   private clickListener: () => void;
-  productId: any;
+  programId: any;
   sellerId: any;
   price: any;
 
@@ -55,10 +54,11 @@ export class ProgramListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     this.clickListener = this.renderer.listen(document, 'click', (event) => {
       const closestBtn = event.target.closest('.btn');
       if (closestBtn) {
-        const { action,productid,sellerid,price } = closestBtn.dataset;
+        const { action,programid,sellerid,price } = closestBtn.dataset;
+        console.log(programid);
         switch (action) {
           case 'addQuantity':
-            this.productId = productid;
+            this.programId = programid;
             this.sellerId = sellerid;
             this.price = price;
             this.modalService.open(this.formModal, this.modalConfig);
@@ -92,8 +92,8 @@ export class ProgramListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     }
     const request = {
       type:EntityType.PROGRAM,
-      itemUniqueId:this.productId,
-      sellerUniqueId:this.sellerId,
+      itemId:this.programId,
+      sellerId:this.sellerId,
       quantity: myForm.value['quantity'],
       price: myForm.value['quantity'] * this.price
     };

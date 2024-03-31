@@ -94,8 +94,8 @@ export class ServiceListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     }
     const request = {
       type:EntityType.SERVICE,
-      itemUniqueId:this.serviceId,
-      sellerUniqueId:this.sellerId,
+      itemId:this.serviceId,
+      sellerId:this.sellerId,
       startDate: myForm.value['startDate'],
       endDate: myForm.value['endDate'],
       price: this.calculateTotalPrice(myForm.value['startDate'],myForm.value['endDate'])

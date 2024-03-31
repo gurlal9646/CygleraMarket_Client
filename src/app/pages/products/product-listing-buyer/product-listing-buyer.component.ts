@@ -92,8 +92,8 @@ export class ProductListingBuyerComponent implements OnInit, AfterViewInit, OnDe
     }
     const request = {
       type:EntityType.PRODUCT,
-      itemUniqueId:this.productId,
-      sellerUniqueId:this.sellerId,
+      itemId:this.productId,
+      sellerId:this.sellerId,
       quantity: myForm.value['quantity'],
       price: myForm.value['quantity'] * this.price
     };
