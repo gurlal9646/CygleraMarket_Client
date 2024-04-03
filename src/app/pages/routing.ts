@@ -35,7 +35,7 @@ const Routing: Routes = [
   {
     path: 'profile',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+    loadChildren: () => import('../account/account.module').then((m) => m.AccountModule),
   },
   {
     path: '',

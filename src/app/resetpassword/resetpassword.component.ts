@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { LoginService } from '../services/login.service';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmPasswordValidator } from '../signup/confirm-password.validator';
 
 @Component({
@@ -22,7 +22,8 @@ export class ResetpasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router:Router
   ) {
     const loadingSubscr = this.isLoading$
       .asObservable()
@@ -71,21 +72,27 @@ export class ResetpasswordComponent implements OnInit {
   async submit() {
     this.isLoading$.next(true);
     const response = await this.loginService.resetPassword(
-      this.resetPasswordForm.value,this.userId,this.token
+      this.userId,this.token,this.resetPasswordForm.value
     );
     if (response.code === 1) {
       Swal.fire({
         position: 'center',
         icon: 'success',
         title: response.message,
-        showCloseButton: true,
+        showCloseButton: false,
+        showConfirmButton:false,
+        timer:3000
       });
+      this.router.navigateByUrl('/login');
+
     } else {
       Swal.fire({
         position: 'center',
         icon: 'error',
         title: response.message,
-        showCloseButton: true,
+        showCloseButton: false,
+        showConfirmButton:false,
+        timer:3000
       });
       this.isLoading$.next(false);
     }

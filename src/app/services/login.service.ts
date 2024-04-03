@@ -27,7 +27,7 @@ export class LoginService {
   }
 
   async forgotPassword(data: any): Promise<ApiResponse> {
-    const url = `${environment.apiUrl}/user/password-reset`;
+    const url = `${environment.apiUrl}/user/sendPasswordResetLink`;
     try {
       const response = await firstValueFrom(
         this._http.post(url, data)
@@ -42,10 +42,25 @@ export class LoginService {
   }
 
   async resetPassword(userId:string, token:string, data: any): Promise<ApiResponse> {
-    const url = `${environment.apiUrl}/user/password-reset/${userId}/${token}`;
+    const url = `${environment.apiUrl}/user/resetPassword/${userId}/${token}`;
     try {
       const response = await firstValueFrom(
         this._http.put(url, data)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
+
+  async validateOTP(data: any): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/validateOTP`;
+    try {
+      const response = await firstValueFrom(
+        this._http.post(url, data)
       );
       return response as ApiResponse;
     } catch (error) {

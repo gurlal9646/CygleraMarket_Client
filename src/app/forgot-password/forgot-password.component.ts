@@ -65,7 +65,9 @@ export class ForgotPasswordComponent implements OnInit {
         position: 'center',
         icon: 'success',
         title: response.message,
-        showCloseButton: true,
+        showCloseButton: false,
+        showConfirmButton:false,
+        timer:3000
       });
     } else {
       Swal.fire({

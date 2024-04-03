@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BuyerApprovalListingComponent } from './buyer-approval-listing/buyer-approval-listing.component';
-import { ChatInnerModule } from "../../_metronic/partials/content/chat-inner/chat-inner.module";
 import { NegotiationConversationComponent } from './negotiation-conversation/negotiation-conversation.component';
 
 

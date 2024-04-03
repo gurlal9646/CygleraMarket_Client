@@ -1,13 +1,21 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  ViewChild,
+  TemplateRef,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { AuthService } from '../services/auth.service';
 import { UserModel } from '../models/user.model';
 export type UserType = UserModel | undefined;
+import { NgForm } from '@angular/forms';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
@@ -21,13 +29,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
+  otp: string = '';
+  @ViewChild('otpModal')
+  otpModal: TemplateRef<any>;
+  modalConfig: NgbModalOptions = {
+    modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
+  };
 
   constructor(
     private fb: FormBuilder,
     private _loginService: LoginService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal
   ) {
     const loadingSubscr = this.isLoading$
       .asObservable()
@@ -81,8 +96,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
     if (response.code == 1) {
       this.user = response.data;
-      this.authService.setcurrentUserValue(this.user);
-      this.router.navigate(['/dashboard']);
+      this.modalService.open(this.otpModal, this.modalConfig);
     } else if (response.subcode == 2) {
       this.showLoginOptions();
     } else {
@@ -109,7 +123,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         <div style="text-align: center;">
           <button class="swal2-confirm swal2-styled swal-button--buyer">Buyer</button>
           <button class="swal2-confirm swal2-styled swal-button--seller">Seller</button>
-          <button class="swal2-confirm swal2-styled swal-button--admin">Admin</button>
         </div>
       `,
     });
@@ -119,24 +132,46 @@ export class LoginComponent implements OnInit, OnDestroy {
       const target = event.target as HTMLElement;
       if (target.classList.contains('swal-button--buyer')) {
         // Perform action for Buyer
-        console.log('Buyer selected');
         this.loginForm.get('roleId')?.setValue(1);
         Swal.close();
         this.submit();
       } else if (target.classList.contains('swal-button--seller')) {
         // Perform action for Seller
-        console.log('Seller selected');
         this.loginForm.get('roleId')?.setValue(2);
-        Swal.close();
-        this.submit();
-      } else if (target.classList.contains('swal-button--admin')) {
-        // Perform action for Admin
-        console.log('Admin selected');
-        this.loginForm.get('roleId')?.setValue(10);
         Swal.close();
         this.submit();
       }
     });
+  }
+
+  async verifyOtp(myForm: NgForm) {
+    this.isLoading$.next(true);
+
+    if (myForm && myForm.invalid) {
+      return;
+    }
+
+    let request = {
+      email: this.loginForm.get('email')?.value,
+      otp: this.otp,
+    };
+
+    const response = await this._loginService.validateOTP(request);
+    if (response.code == 1) {
+      this.modalService.dismissAll();
+      this.authService.setcurrentUserValue(this.user);
+      this.router.navigate(['/dashboard']);
+    } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: response.message,
+        showCloseButton: true,
+      });
+      this.isLoading$.next(false);
+    }
+
+    this.isLoading$.next(false);
   }
 
   ngOnDestroy() {
