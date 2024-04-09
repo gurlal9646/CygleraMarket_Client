@@ -10,7 +10,7 @@ import { ConnectedAccountsComponent } from './settings/forms/connected-accounts/
 import { DeactivateAccountComponent } from './settings/forms/deactivate-account/deactivate-account.component';
 import { EmailPreferencesComponent } from './settings/forms/email-preferences/email-preferences.component';
 import { NotificationsComponent } from './settings/forms/notifications/notifications.component';
-import { SignInMethodComponent } from './settings/forms/sign-in-method/sign-in-method.component';
+import { ChangePassword } from './settings/forms/sign-in-method/sign-in-method.component';
 import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
 import {SharedModule} from "../../_metronic/shared/shared.module";
 
@@ -24,7 +24,7 @@ import {SharedModule} from "../../_metronic/shared/shared.module";
     DeactivateAccountComponent,
     EmailPreferencesComponent,
     NotificationsComponent,
-    SignInMethodComponent,
+    ChangePassword,
   ],
   imports: [
     CommonModule,

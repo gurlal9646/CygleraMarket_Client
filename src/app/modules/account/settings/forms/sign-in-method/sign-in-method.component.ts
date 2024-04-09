@@ -5,7 +5,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
   selector: 'app-sign-in-method',
   templateUrl: './sign-in-method.component.html',
 })
-export class SignInMethodComponent implements OnInit, OnDestroy {
+export class  ChangePassword implements OnInit, OnDestroy {
   showChangeEmailForm: boolean = false;
   showChangePasswordForm: boolean = false;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

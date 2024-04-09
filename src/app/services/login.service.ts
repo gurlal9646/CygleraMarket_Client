@@ -70,4 +70,34 @@ export class LoginService {
       return Promise.reject(res);
     }
   }
+
+  async getUserDetails(): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/details`;
+    try {
+      const response = await firstValueFrom(
+        this._http.get(url)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
+
+  async updateUserDetails(data:any): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/details`;
+    try {
+      const response = await firstValueFrom(
+        this._http.put(url,data)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
 }

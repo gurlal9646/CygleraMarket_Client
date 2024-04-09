@@ -17,15 +17,15 @@
       <label class="col-lg-4 fw-bold text-muted">Full Name</label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Max Smith</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{user.firstName}} {{user.lastName}}</span>
       </div>
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Company</label>
+      <label class="col-lg-4 fw-bold text-muted">Email</label>
 
       <div class="col-lg-8 fv-row">
-        <span class="fw-bold fs-6">Keenthemes</span>
+        <span class="fw-bold fs-6">{{user.email}} </span>
       </div>
     </div>
 
@@ -40,19 +40,43 @@
       </label>
 
       <div class="col-lg-8 d-flex align-items-center">
-        <span class="fw-bolder fs-6 me-2">044 3276 454 935</span>
+        <span class="fw-bolder fs-6 me-2">{{user.phoneNumber}}</span>
 
         <span class="badge badge-success">Verified</span>
       </div>
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Company Site</label>
+      <label class="col-lg-4 fw-bold text-muted">Company Name</label>
 
       <div class="col-lg-8">
-        <a href="#" class="fw-bold fs-6 text-gray-900 text-hover-primary">
-          keenthemes.com
-        </a>
+        <span class="fw-bolder fs-6 me-2">{{user.companyName}}</span>
+
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Category</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 me-2">{{user.category}}</span>
+
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">City</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-900">{{user.city}}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">State</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-900">{{user.state}}</span>
       </div>
     </div>
 
@@ -67,25 +91,29 @@
       </label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Germany</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{user.country}}</span>
       </div>
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Communication</label>
+      <label class="col-lg-4 fw-bold text-muted">Postal Code</label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Email, Phone</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{user.postalCode}}</span>
       </div>
     </div>
 
-    <div class="row mb-10">
-      <label class="col-lg-4 fw-bold text-muted">Allow Changes</label>
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Account Creation</label>
 
       <div class="col-lg-8">
-        <span class="fw-bold fs-6">Yes</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{user.createdAt | date:'medium'}}</span>
       </div>
     </div>
+
+
+
+  
 
   </div>
 </div>
