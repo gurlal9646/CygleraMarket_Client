@@ -53,12 +53,12 @@ export class BuyerContractListingComponent
   acceptContract(contractId:string){
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you want to accept this contract?',
+      text: 'Do you want to make payment for this contract?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, reject it!',
+      confirmButtonText: 'Yes, pay it!',
     }).then(async (result) => {
       if (result.isConfirmed) {
         const request = {
