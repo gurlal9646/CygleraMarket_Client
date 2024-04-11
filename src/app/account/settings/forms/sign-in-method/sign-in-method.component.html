@@ -15,63 +15,9 @@
         <div class="d-flex flex-wrap align-items-center">
           <div id="kt_signin_email" class="false">
             <div class="fs-6 fw-bolder mb-1">Email Address</div>
-            <div class="fw-bold text-gray-600">{{email}}</div>
+            <div class="fw-bold text-gray-600">{{ email }}</div>
           </div>
-          <div id="kt_signin_email_edit" class="flex-row-fluid d-none">
-            <form id="kt_signin_change_email" class="form" novalidate="">
-              <div class="row mb-6">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                  <div class="fv-row mb-0">
-                    <label
-                      for="emailaddress"
-                      class="form-label fs-6 fw-bolder mb-3"
-                      >Enter New Email Address</label
-                    ><input
-                      type="email"
-                      class="form-control form-control-lg form-control-solid"
-                      id="emailaddress"
-                      placeholder="Email Address"
-                      name="newEmail"
-                      value="support@keenthemes.com"
-                    />
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="fv-row mb-0">
-                    <label
-                      for="confirmemailpassword"
-                      class="form-label fs-6 fw-bolder mb-3"
-                      >Confirm Password</label
-                    ><input
-                      type="password"
-                      class="form-control form-control-lg form-control-solid"
-                      id="confirmemailpassword"
-                      name="confirmPassword"
-                      value=""
-                    />
-                    <div class="fv-plugins-message-container">
-                      <div class="fv-help-block">Password is required</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex">
-                <button
-                  id="kt_signin_submit"
-                  type="submit"
-                  class="btn btn-primary me-2 px-6"
-                >
-                  Update Email</button
-                ><button
-                  id="kt_signin_cancel"
-                  type="button"
-                  class="btn btn-color-gray-500 btn-active-light-primary px-6"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+
           <div id="kt_signin_email_button" class="ms-auto false">
             <button
               class="btn btn-light btn-active-light-primary"
@@ -85,12 +31,13 @@
 
       <ng-container *ngIf="showChangeEmailForm">
         <div class="d-flex flex-wrap align-items-center">
-          <div id="kt_signin_email" class="d-none">
-            <div class="fs-6 fw-bolder mb-1">Email Address</div>
-            <div class="fw-bold text-gray-600">support&#64;keenthemes.com</div>
-          </div>
           <div id="kt_signin_email_edit" class="flex-row-fluid false">
-            <form id="kt_signin_change_email" [formGroup]="emailForm" class="form" novalidate="">
+            <form
+              id="kt_signin_change_email"
+              [formGroup]="emailForm"
+              class="form"
+              novalidate=""
+            >
               <div class="row mb-6">
                 <div class="col-lg-6 mb-4 mb-lg-0">
                   <div class="fv-row mb-0">
@@ -121,11 +68,7 @@
                     <span class="indicator-progress" [style.display]="'block'">
                       Please wait...{{ " " }}
                       <span
-                        class="
-                          spinner-border spinner-border-sm
-                          align-middle
-                          ms-2
-                        "
+                        class="spinner-border spinner-border-sm align-middle ms-2"
                       ></span>
                     </span>
                   </ng-container></button
@@ -165,7 +108,7 @@
       <ng-container *ngIf="showChangePasswordForm">
         <div class="d-flex flex-wrap align-items-center mb-10">
           <div id="kt_signin_password_edit" class="flex-row-fluid false">
-            <form id="kt_signin_change_password" class="form" novalidate="">
+            <form id="kt_signin_change_password" class="form" novalidate=""  [formGroup]="passwordForm">
               <div class="row mb-1">
                 <div class="col-lg-4">
                   <div class="fv-row mb-0">
@@ -178,8 +121,39 @@
                       class="form-control form-control-lg form-control-solid"
                       id="currentpassword"
                       name="currentPassword"
-                      value="1234"
+                      formControlName="currentPassword"
+                      [ngClass]="{
+                        'is-invalid':
+                          passwordForm.controls['password'].invalid &&
+                          (passwordForm.controls['password'].touched ||
+                          passwordForm.controls['password'].dirty),
+                        'is-valid': passwordForm.controls['password'].valid
+                      }"
                     />
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Current password is required',
+                      control: passwordForm.controls['currentPassword']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'minlength',
+                      message: 'Current password should have at least 3 symbols',
+                      control: passwordForm.controls['currentPassword']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'maxLength',
+                      message: 'Current password should have maximum 100 symbols',
+                      control: passwordForm.controls['currentPassword']
+                    }"
+                  ></ng-container>
                   </div>
                 </div>
                 <div class="col-lg-4">
@@ -193,8 +167,39 @@
                       class="form-control form-control-lg form-control-solid"
                       id="newpassword"
                       name="newPassword"
-                      value="1234"
+                      formControlName="password"
+                      [ngClass]="{
+                        'is-invalid':
+                          passwordForm.controls['password'].invalid &&
+                          (passwordForm.controls['password'].touched ||
+                          passwordForm.controls['password'].dirty),
+                        'is-valid': passwordForm.controls['password'].valid
+                      }"
                     />
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Password is required',
+                      control: passwordForm.controls['password']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'minlength',
+                      message: 'Password should have at least 3 symbols',
+                      control: passwordForm.controls['password']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'maxLength',
+                      message: 'Password should have maximum 100 symbols',
+                      control: passwordForm.controls['password']
+                    }"
+                  ></ng-container>
                   </div>
                 </div>
                 <div class="col-lg-4">
@@ -208,13 +213,56 @@
                       class="form-control form-control-lg form-control-solid"
                       id="confirmpassword"
                       name="passwordConfirmation"
-                      value="1234"
+                      formControlName="cPassword"
+                      [ngClass]="{
+                        'is-invalid':
+                          passwordForm.controls['cPassword'].invalid &&
+                          (passwordForm.controls['cPassword'].touched ||
+                          passwordForm.controls['cPassword'].dirty),
+                        'is-valid': passwordForm.controls['cPassword'].valid
+                      }"
                     />
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Confirm Password is required',
+                      control: passwordForm.controls['cPassword']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'minlength',
+                      message: 'Confirm Password should have at least 3 symbols',
+                      control: passwordForm.controls['cPassword']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'maxLength',
+                      message: 'Confirm Password should have maximum 100 symbols',
+                      control: passwordForm.controls['cPassword']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                    *ngIf="
+                      passwordForm.controls['cPassword'].errors &&
+                      passwordForm.controls['cPassword'].errors.ConfirmPassword
+                    "
+                  >
+                    <div class="fv-plugins-message-container">
+                      <div class="fv-help-block">
+                        'Passsword' and 'Confirm Password' didn't match.
+                      </div>
+                    </div>
+                  </ng-container>
                   </div>
                 </div>
               </div>
               <div class="form-text mb-5">
-                Password must be at least 8 character and contain symbols
+                Password must be at least 3 character and contain symbols
               </div>
               <div class="d-flex">
                 <button
@@ -230,11 +278,7 @@
                     <span class="indicator-progress" [style.display]="'block'">
                       Please wait...{{ " " }}
                       <span
-                        class="
-                          spinner-border spinner-border-sm
-                          align-middle
-                          ms-2
-                        "
+                        class="spinner-border spinner-border-sm align-middle ms-2"
                       ></span>
                     </span>
                   </ng-container></button
@@ -248,6 +292,26 @@
                 </button>
               </div>
             </form>
+            <ng-template
+            #formError
+            let-control="control"
+            let-message="message"
+            let-validation="validation"
+          >
+            <ng-container
+              *ngIf="
+                control.hasError(validation) && (control.dirty || control.touched)
+              "
+            >
+              <div class="fv-plugins-message-container">
+                <div class="fv-help-block">
+                  <span role="alert">
+                    {{ message }}
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+          </ng-template>
           </div>
           <div id="kt_signin_password_button" class="ms-auto d-none">
             <button class="btn btn-light btn-active-light-primary">
@@ -256,8 +320,6 @@
           </div>
         </div>
       </ng-container>
-
-
     </div>
   </div>
 </div>

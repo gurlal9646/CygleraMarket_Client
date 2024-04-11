@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { UserModel } from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { LoginService } from 'src/app/services/login.service';
 
 
@@ -13,6 +15,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
   registrationForm: FormGroup;
+  user:UserModel;
   postalCodePattern = /^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$|^\d{5}$/i;
   countries = [
     {
@@ -34,7 +37,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private loginService: LoginService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService:AuthService
   ) {
     const loadingSubscr = this.isLoading$
       .asObservable()
@@ -201,24 +205,21 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
 
   async updateUserDetails(){
+    this.isLoading$.next(true);
     const response = await this.loginService.updateUserDetails(this.registrationForm.value);
     if (response.code == 1) {
       this.getUserDetails();
+      const currentUserJSON = localStorage.getItem('currentuser');
+      this.user = currentUserJSON ? JSON.parse(currentUserJSON) : null;
+      this.user.firstName = this.registrationForm.get('firstName')?.value;
+      this.user.lastName = this.registrationForm.get('lastName')?.value;
+      this.authService.setcurrentUserValue(this.user);
+      this.isLoading$.next(false);
       this.cdr.detectChanges();
     }
   }
 
-  saveSettings() {
-    this.isLoading$.next(true);
-    setTimeout(() => {
-      this.isLoading$.next(false);
-      this.cdr.detectChanges();
-    }, 1500);
-  }
 
-  submit(){
-
-  }
 
   getCountriesStates(
     selectedCountry: string

@@ -100,4 +100,34 @@ export class LoginService {
       return Promise.reject(res);
     }
   }
+
+  async changePassword(data:any): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/changePassword`;
+    try {
+      const response = await firstValueFrom(
+        this._http.post(url,data)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
+
+  async deleteAccount(): Promise<ApiResponse> {
+    const url = `${environment.apiUrl}/user/deleteAccount`;
+    try {
+      const response = await firstValueFrom(
+        this._http.delete(url)
+      );
+      return response as ApiResponse;
+    } catch (error) {
+      const res = new ApiResponse();
+      res.subcode = 100;
+      res.message = 'An error occurred';
+      return Promise.reject(res);
+    }
+  }
 }

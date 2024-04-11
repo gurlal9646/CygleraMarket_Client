@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UserModel } from 'src/app/models/user.model';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { BuyerService } from '../services/buyer.service';
+import { NgForm } from '@angular/forms';
+import { LoginService } from '../services/login.service';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-signup',
@@ -39,6 +43,12 @@ export class SignupComponent implements OnInit, OnDestroy {
     },
     // Add more countries with their cities and states
   ];
+  otp: string = '';
+  @ViewChild('otpModal')
+  otpModal: TemplateRef<any>;
+  modalConfig: NgbModalOptions = {
+    modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
+  };
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
@@ -53,7 +63,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     private sellerService: SellerService,
     private buyerService: BuyerService,
     private authService: AuthService,
-    private _avRoute: ActivatedRoute
+    private _avRoute: ActivatedRoute,
+    private loginService:LoginService,
+    private modalService: NgbModal
   ) {
     this.userType = this._avRoute.snapshot.params['userType'];
     this.heading = this.userType;
@@ -260,8 +272,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     if (response.code == 1) {
       this.user = response.data;
-      this.authService.setcurrentUserValue(this.user);
-      this.router.navigate(['/dashboard']);
+      this.modalService.open(this.otpModal, this.modalConfig);
     } else {
       Swal.fire({
         position: 'center',
@@ -286,6 +297,36 @@ export class SignupComponent implements OnInit, OnDestroy {
     const country = this.countries.find((c) => c.name === selectedCountry);
     const city = country?.states.find((s) => s.state === selectedState);
     return city ? city.cities : [];
+  }
+
+  async verifyOtp(myForm: NgForm) {
+    this.isLoading$.next(true);
+
+    if (myForm && myForm.invalid) {
+      return;
+    }
+
+    let request = {
+      email: this.registrationForm.get('email')?.value,
+      otp: this.otp,
+    };
+
+    const response = await this.loginService.validateOTP(request);
+    if (response.code == 1) {
+      this.modalService.dismissAll();
+      this.authService.setcurrentUserValue(this.user);
+      this.router.navigate(['/dashboard']);
+    } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: response.message,
+        showCloseButton: true,
+      });
+      this.isLoading$.next(false);
+    }
+
+    this.isLoading$.next(false);
   }
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
